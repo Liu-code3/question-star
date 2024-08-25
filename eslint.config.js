@@ -4,10 +4,12 @@ export default antfu({
   react: true,
   typescript: true,
   formatters: true,
-  unocss: true,
   stylistic: {
     indent: 2, // 2, or 'tab'
     quotes: 'single', // or 'double'
+  },
+  rules: {
+    'style/comma-dangle': 'off'
   },
   ignores: [
     '.vscode',

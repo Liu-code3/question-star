@@ -1,12 +1,10 @@
 import './App.css'
-import { useRoutes } from 'react-router-dom'
-import routes from '@/router'
+import Routes from '@/router'
 
 function App() {
-  const ElementRouter = useRoutes(routes)
   return (
     <div>
-      { ElementRouter }
+      <Routes></Routes>
     </div>
   )
 }
