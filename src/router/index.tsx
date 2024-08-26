@@ -1,4 +1,5 @@
-import { lazy } from 'react'
+import type { ReactNode } from 'react'
+import { Suspense, lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
@@ -16,38 +17,46 @@ const Stat = lazy(() => import('@/views/question/stat/index.tsx'))
 
 const NotFound = lazy(() => import('@/views/NotFound/404.tsx'))
 
+function lazyComponent(element: ReactNode): ReactNode {
+  return (
+    <Suspense fallback={<div>loading...</div>}>
+      { element}
+    </Suspense>
+  )
+}
+
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <MainLayout />,
+    element: lazyComponent(<MainLayout />),
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: lazyComponent(<Home />),
       },
       {
         path: 'login',
-        element: <Login />,
+        element: lazyComponent(<Login />),
       },
       {
         path: 'register',
-        element: <Register />,
+        element: lazyComponent(<Register />),
       },
       {
         path: 'manage',
-        element: <ManageLayout />,
+        element: lazyComponent(<ManageLayout />),
         children: [
           {
             path: 'list',
-            element: <List />
+            element: lazyComponent(<List />)
           },
           {
             path: 'star',
-            element: <Star />
+            element: lazyComponent(<Star />)
           },
           {
             path: 'trash',
-            element: <Trash />
+            element: lazyComponent(<Trash />)
           }
         ]
       }
@@ -55,21 +64,21 @@ const routes: RouteObject[] = [
   },
   {
     path: 'question',
-    element: <QuestionLayout />,
+    element: lazyComponent(<QuestionLayout />),
     children: [
       {
         path: 'edit/:id',
-        element: <Edit />
+        element: lazyComponent(<Edit />)
       },
       {
         path: 'stat/:id',
-        element: <Stat />
+        element: lazyComponent(<Stat />)
       }
     ]
   },
   {
     path: '*',
-    element: <NotFound />
+    element: lazyComponent(<NotFound />)
   }
 ]
 

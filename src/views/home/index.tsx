@@ -18,7 +18,7 @@ const Home: FC = () => {
         </Paragraph>
         <div>
           <Button type="primary" onClick={() => navigate(MANAGE_INDEX_PATHNAME)}>
-              开始使用
+            开始使用
           </Button>
         </div>
       </div>
