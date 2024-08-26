@@ -54,15 +54,15 @@ const routes: RouteObject[] = [
     ]
   },
   {
-    path: "question",
+    path: 'question',
     element: <QuestionLayout />,
     children: [
       {
-        path: "edit/:id",
+        path: 'edit/:id',
         element: <Edit />
       },
       {
-        path: "stat/:id",
+        path: 'stat/:id',
         element: <Stat />
       }
     ]
@@ -76,7 +76,7 @@ const routes: RouteObject[] = [
 const router = createBrowserRouter(routes)
 
 function Routes() {
-  return <RouterProvider router={router}></RouterProvider>
+  return <RouterProvider router={router} />
 }
 
 export default Routes

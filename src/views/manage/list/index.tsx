@@ -1,8 +1,9 @@
 import type { FC } from 'react'
 import { useState } from 'react'
+import { Typography } from 'antd'
 import styles from '../common.module.scss'
-import QuestionCard, {PropsType} from "@/components/QuestionCard";
-import { Typography } from "antd";
+import type { PropsType } from '@/components/QuestionCard'
+import QuestionCard from '@/components/QuestionCard'
 
 const { Title } = Typography
 
