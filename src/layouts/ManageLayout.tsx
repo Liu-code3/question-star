@@ -27,6 +27,7 @@ const ManageLayout: FC = () => {
             type={pathname.startsWith('/manage/list') ? 'default' : 'text'}
             size="large"
             icon={<BarsOutlined />}
+            onClick={() => navigate('/manage/list')}
           >
             我的问卷
           </Button>

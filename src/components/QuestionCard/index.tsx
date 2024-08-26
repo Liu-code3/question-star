@@ -1,7 +1,8 @@
-import {FC, useState} from 'react'
-import {CopyOutlined, DeleteOutlined, EditOutlined, LineChartOutlined, StarOutlined} from '@ant-design/icons'
-import {Button, Divider, Popconfirm, Space, Tag} from 'antd'
-import {Link, useNavigate} from 'react-router-dom'
+import type { FC } from 'react'
+import { useState } from 'react'
+import { CopyOutlined, DeleteOutlined, EditOutlined, LineChartOutlined, StarOutlined } from '@ant-design/icons'
+import { Button, Divider, Popconfirm, Space, Tag } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from './index.module.scss'
 
 export interface PropsType {
@@ -52,61 +53,61 @@ const QuestionCard: FC<PropsType> = (props) => {
         </div>
       </div>
       <Divider style={{ margin: '12px 0' }}></Divider>
-        <div className={styles['button-container']}>
-            <div className={styles.left}>
-                <Space>
-                    <Button
-                        icon={<EditOutlined/>}
-                        type="text"
-                        size="small"
-                        onClick={() => navigate(`/question/edit/${_id}`)}
-                    >
-                        编辑问卷
-                    </Button>
-                    <Button
-                        icon={<LineChartOutlined/>}
-                        type="text"
-                        size="small"
-                        disabled={!isPublished}
-                        onClick={() => navigate(`/question/stat/${_id}`)}
-                    >
-                        问卷统计
-                    </Button>
-                </Space>
-            </div>
-            <div className={styles.right}>
-                <Space>
-                    <Button
-                        type="text"
-                        icon={<StarOutlined/>}
-                        size="small"
-                    >
-                        {isStarState ? "取消星标" : "标星"}
-                    </Button>
-                    <Popconfirm
-                        title="是否要复制问卷"
-                        okText="确定"
-                        cancelText="取消"
-                    >
-                        <Button
-                            type="text"
-                            icon={<CopyOutlined/>}
-                            size="small"
-                        >
-                            复制
-                        </Button>
-                    </Popconfirm>
-
-                    <Button
-                        type="text"
-                        icon={<DeleteOutlined/>}
-                        size="small"
-                    >
-                        删除
-                    </Button>
-                </Space>
-            </div>
+      <div className={styles['button-container']}>
+        <div className={styles.left}>
+          <Space>
+            <Button
+              icon={<EditOutlined />}
+              type="text"
+              size="small"
+              onClick={() => navigate(`/question/edit/${_id}`)}
+            >
+              编辑问卷
+            </Button>
+            <Button
+              icon={<LineChartOutlined />}
+              type="text"
+              size="small"
+              disabled={!isPublished}
+              onClick={() => navigate(`/question/stat/${_id}`)}
+            >
+              问卷统计
+            </Button>
+          </Space>
         </div>
+        <div className={styles.right}>
+          <Space>
+            <Button
+              type="text"
+              icon={<StarOutlined />}
+              size="small"
+            >
+              {isStarState ? '取消星标' : '标星'}
+            </Button>
+            <Popconfirm
+              title="是否要复制问卷"
+              okText="确定"
+              cancelText="取消"
+            >
+              <Button
+                type="text"
+                icon={<CopyOutlined />}
+                size="small"
+              >
+                复制
+              </Button>
+            </Popconfirm>
+
+            <Button
+              type="text"
+              icon={<DeleteOutlined />}
+              size="small"
+            >
+              删除
+            </Button>
+          </Space>
+        </div>
+      </div>
     </div>
   )
 }
