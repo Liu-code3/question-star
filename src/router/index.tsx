@@ -17,6 +17,10 @@ const Stat = lazy(() => import('@/views/question/stat/index.tsx'))
 
 const NotFound = lazy(() => import('@/views/NotFound/404.tsx'))
 
+/**
+ * @remarks 闪烁的发生是因为将整个 App 包裹在 Suspense 中会导致在懒加载时整个应用都渲染 fallback。而将 Suspense 包裹在单个组件上，
+ * 只会让正在懒加载的组件局部渲染 fallback，从而避免了不必要的全屏重新渲染并防止闪烁。
+ */
 function lazyComponent(element: ReactNode): ReactNode {
   return (
     <Suspense fallback={<div>loading...</div>}>
