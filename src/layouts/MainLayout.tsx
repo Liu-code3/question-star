@@ -3,6 +3,7 @@ import { Layout } from 'antd'
 import { Outlet } from 'react-router-dom'
 import styles from './MainLayout.module.scss'
 import Logo from '@/components/Logo/index.tsx'
+import UserInfo from '@/components/UserInfo'
 
 const { Header, Footer, Content } = Layout
 
@@ -12,6 +13,9 @@ const MainLayout: FC = () => {
       <Header className={styles.header}>
         <div className={styles.left}>
           <Logo />
+        </div>
+        <div className={styles.right}>
+          <UserInfo></UserInfo>
         </div>
       </Header>
       <Content className={styles.main}>
