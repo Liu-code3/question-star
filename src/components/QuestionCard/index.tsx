@@ -1,10 +1,17 @@
 import type { FC } from 'react'
-import { useState } from 'react'
-import { CopyOutlined, DeleteOutlined, EditOutlined, LineChartOutlined, StarOutlined } from '@ant-design/icons'
-import { Button, Divider, Popconfirm, Space, Tag } from 'antd'
+import {
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+  LineChartOutlined,
+  StarOutlined
+} from '@ant-design/icons'
+import { Button, Divider, Modal, Popconfirm, Space, Tag, message } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './index.module.scss'
 
+const { confirm } = Modal
 export interface PropsType {
   // MARK:服务端mongodb会自动生成_id，且不会重复。创建问卷这个主要是服务端来实现
   _id: string // 服务端 mongodb ，自动，_id 不重复
@@ -15,18 +22,30 @@ export interface PropsType {
   createdAt: string
 }
 const QuestionCard: FC<PropsType> = (props) => {
-  const { _id, title, createdAt, answerCount, isPublished, isStar } = props
-  const [isStarState] = useState(isStar)
   const navigate = useNavigate()
+  const { _id, title, createdAt, answerCount, isPublished, isStar } = props
+
+  function duplicate() {
+    message.success('复制成功').then((_) => {})
+  }
+
+  function del() {
+    confirm({
+      title: '确定删除该问卷吗? ',
+      icon: <ExclamationCircleOutlined />,
+      onOk: () => message.success('执行删除')
+    })
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.title}>
         <div className={styles.left}>
           <Link
-            to={isPublished ? `/question/${_id}` : `/manage/question/${_id}`}
+            to={isPublished ? `/question/stat/${_id}` : `/question/edit/${_id}`}
           >
             <Space>
-              {isStarState && <StarOutlined style={{ color: 'red' }} />}
+              {isStar && <StarOutlined style={{ color: 'red' }} />}
               {title}
             </Space>
           </Link>
@@ -82,12 +101,13 @@ const QuestionCard: FC<PropsType> = (props) => {
               icon={<StarOutlined />}
               size="small"
             >
-              {isStarState ? '取消星标' : '标星'}
+              {isStar ? '取消星标' : '标星'}
             </Button>
             <Popconfirm
               title="是否要复制问卷"
               okText="确定"
               cancelText="取消"
+              onConfirm={duplicate}
             >
               <Button
                 type="text"
@@ -102,6 +122,7 @@ const QuestionCard: FC<PropsType> = (props) => {
               type="text"
               icon={<DeleteOutlined />}
               size="small"
+              onClick={del}
             >
               删除
             </Button>

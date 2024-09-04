@@ -8,7 +8,14 @@ import QuestionCard from '@/components/QuestionCard'
 const { Title } = Typography
 
 const List: FC = () => {
-  const [list] = useState([]) // 全部的列表数据，上划加载更多，累计
+  const [questionList] = useState([{
+    _id: '1', // 服务端 mongodb ，自动，_id 不重复
+    title: '问卷1',
+    isStar: true,
+    isPublished: true,
+    answerCount: 100,
+    createdAt: '小生'
+  }]) // 全部的列表数据，上划加载更多，累计
   return (
     <>
       <div className={styles.header}>
@@ -22,16 +29,14 @@ const List: FC = () => {
       <div className={styles.content}>
         {/* 问卷列表 */}
         {
-          list.length > 0
-          && list.map((q: PropsType) => {
+          questionList.length > 0
+          && questionList.map((q: PropsType) => {
             const { _id } = q
             return <QuestionCard key={_id} {...q} />
           })
         }
       </div>
-      <div className={styles.footer}>
-        <div>底部</div>
-      </div>
+      <div className={styles.footer}>loadMore 上划加载更多...</div>
     </>
   )
 }
