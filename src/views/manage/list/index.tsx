@@ -14,7 +14,7 @@ const rawQuestionList = [{
   isStar: true,
   isPublished: true,
   answerCount: 100,
-  createdAt: '小生'
+  createdAt: '2024-09-04 22:30'
 }]
 
 const List: FC = () => {

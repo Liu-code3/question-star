@@ -1,10 +1,10 @@
 import type { FC } from 'react'
 import { useState } from 'react'
 import { Empty, Typography } from 'antd'
+import { useTitle } from 'ahooks'
 import styles from '@/views/manage/common.module.scss'
 import type { PropsType } from '@/components/QuestionCard'
 import QuestionCard from '@/components/QuestionCard'
-import {useTitle} from "ahooks";
 
 const { Title } = Typography
 
@@ -14,7 +14,7 @@ const rawQuestionList = [{
   isStar: true,
   isPublished: true,
   answerCount: 100,
-  createdAt: '小生'
+  createdAt: '2024-09-04 22:30'
 }]
 const Star: FC = () => {
   useTitle('小星问卷 - 星标问卷')
