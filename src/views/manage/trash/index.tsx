@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Button, Empty, Popconfirm, Space, Switch, Table, Tag, Typography, message } from 'antd'
 import { useTitle } from 'ahooks'
 import styles from '@/views/manage/common.module.scss'
+import ListSearch from "@/components/ListSearch.tsx";
 
 const { Title } = Typography
 
@@ -51,7 +52,7 @@ const Trash: FC = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
   async function del() {
-    await message.success('删除成功')
+    message.success('删除成功')
   }
 
   // 可以把 JSX 片段定义为一个变量
@@ -93,7 +94,7 @@ const Trash: FC = () => {
           <Title level={3}>回收站</Title>
         </div>
         <div className={styles.right}>
-          搜索
+          <ListSearch />
         </div>
       </div>
       <div className={styles.content}>

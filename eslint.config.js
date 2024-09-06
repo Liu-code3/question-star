@@ -10,7 +10,8 @@ export default antfu({
     quotes: 'single', // or 'double'
   },
   rules: {
-    'style/comma-dangle': 'off'
+    'style/comma-dangle': 'off',
+    'no-console': 'warn'
   },
   ignores: [
     '.vscode',

@@ -5,6 +5,7 @@ import { useTitle } from 'ahooks'
 import styles from '@/views/manage/common.module.scss'
 import type { PropsType } from '@/components/QuestionCard'
 import QuestionCard from '@/components/QuestionCard'
+import ListSearch from '@/components/ListSearch.tsx'
 
 const { Title } = Typography
 
@@ -26,7 +27,7 @@ const Star: FC = () => {
           <Title level={3}>星标问卷</Title>
         </div>
         <div className={styles.right}>
-          搜索
+          <ListSearch />
         </div>
       </div>
       <div className={styles.content}>
