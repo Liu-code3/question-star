@@ -2,7 +2,11 @@ import antfu from '@antfu/eslint-config'
 
 export default antfu({
   react: true,
-  typescript: true,
+  typescript: {
+    overrides: {
+      'ts/no-unused-expressions': ['error', { allowTernary: true }]
+    }
+  },
   formatters: true,
   unocss: true,
   stylistic: {
@@ -11,7 +15,8 @@ export default antfu({
   },
   rules: {
     'style/comma-dangle': 'off',
-    'no-console': 'warn'
+    'no-console': 'warn',
+    // 'ts/no-unused-expressions': 'off'
   },
   ignores: [
     '.vscode',
