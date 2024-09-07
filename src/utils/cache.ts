@@ -11,14 +11,14 @@ class Cache {
   }
 
   setCache<T>(key: string, value: T) {
-    let _key = ''
+    let val = ''
     if (typeof value === 'string') {
-      _key = key
+      val = value
     }
     else {
-      _key = JSON.stringify(key)
+      val = JSON.stringify(value)
     }
-    this.storage.setItem(_key, JSON.stringify(value))
+    this.storage.setItem(key, val)
   }
 
   getCache<T>(key: string): T | null {
@@ -53,7 +53,8 @@ function isValidJSON(data: string): boolean {
     JSON.parse(data)
     return true
   }
-  catch (err) {
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  catch (_) {
     return false
   }
 }
