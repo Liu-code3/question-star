@@ -20,6 +20,7 @@ const ListSearch: FC = () => {
     const newVal = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
     setValue(newVal)
   }, [searchParams])
+
   function handleSearch(value: string) {
     //  跳转页面, 增加 url  参数
     navigate({

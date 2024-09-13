@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { Button, Space } from 'antd'
+import { Button, Space, message } from 'antd'
 import {
   BarsOutlined,
   DeleteOutlined,
@@ -7,11 +7,22 @@ import {
   StarOutlined
 } from '@ant-design/icons'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useRequest } from 'ahooks'
 import styles from './ManageLayout.module.scss'
+import { createQuestionApi } from '@/api/question.ts'
 
 const ManageLayout: FC = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+
+  const { loading, run: handleCreateClick } = useRequest(createQuestionApi, {
+    manual: true,
+    onSuccess(res) {
+      message.success('创建成功')
+      navigate(`/question/edit/${res.data.id}`)
+    }
+  })
+
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -20,6 +31,8 @@ const ManageLayout: FC = () => {
             type="primary"
             size="large"
             icon={<PlusOutlined />}
+            onClick={handleCreateClick}
+            disabled={loading}
           >
             新建问卷
           </Button>
