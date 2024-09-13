@@ -1,7 +1,11 @@
 import type { AxiosError } from 'axios'
+import { message } from 'antd'
 
 // 以下这些code需要重新登录
 const reloadCodes: number[] = [401, 1011007, 1011008]
+
+// 以下code是代表成功
+const successCodes: string[] = ['3001', '200']
 
 const requestConfig = {
   // TokenName // Authorization
@@ -30,13 +34,12 @@ const errorCodeMap: { [key: number]: string } = {
 function handlerError(error: AxiosError) {
   const status = error.response && error.response.status
   const description = status && errorCodeMap[status]
-  // TODO 消息提示
-  // message.error(`${description}`, { duration: 3000 });
-  console.log('=>(config.ts:35) description', description)
+  message.error(`${description}`)
 }
 
 export {
   requestConfig,
   reloadCodes,
+  successCodes,
   handlerError,
 }

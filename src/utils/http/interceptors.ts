@@ -1,9 +1,9 @@
 import type { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import { message } from 'antd'
 import { localCache } from '../cache.ts'
 
-import { handlerError, reloadCodes, requestConfig } from './config.ts'
+import { handlerError, reloadCodes, requestConfig, successCodes } from './config.ts'
 
-// TODO 消息提示
 export function setupInterceptors(axiosInstance: AxiosInstance) {
   function reqResolve(config: InternalAxiosRequestConfig) {
     const token = localCache.getCache(requestConfig.TOKEN_NAME)
@@ -24,8 +24,8 @@ export function setupInterceptors(axiosInstance: AxiosInstance) {
   }
 
   function resResolve(response: AxiosResponse) {
-    const code: number = response.data.code
-    const data = response.data
+    const code = response.data.code || response.status
+    const data = response.data || {}
 
     if (reloadCodes.includes(code)) {
       // if (!loginBack.value)
@@ -34,17 +34,13 @@ export function setupInterceptors(axiosInstance: AxiosInstance) {
       return Promise.reject(data)
     }
 
-    if (code !== 200) {
-      const customErrorMessage = response.config.data.msg
-      console.log('=>(interceptors.ts:39) customErrorMessage', customErrorMessage)
-      // message.error(customErrorMessage || data.msg);
+    if (!successCodes.includes(code)) {
+      const customErrorMessage = response.data?.message
+      message.error(customErrorMessage || '网络错误', 1)
       return Promise.reject(response)
     }
     else {
       // 请求成功
-      const msg = data.msg || '请求成功'
-      console.log('=>(interceptors.ts:46) msg', msg)
-      // message.success(msg);
       return Promise.resolve(data)
     }
   }

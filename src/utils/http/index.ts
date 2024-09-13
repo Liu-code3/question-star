@@ -3,7 +3,7 @@ import { setupInterceptors } from './interceptors.ts'
 
 export function createAxios(options = {}) {
   const defaultOptions = {
-    baseURL: import.meta.env.VITE_API_BASEURL,
+    baseURL: import.meta.env.VITE_BASE_URL,
     timeout: import.meta.env.VITE_TIMEOUT,
   }
 
