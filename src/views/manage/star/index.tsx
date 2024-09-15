@@ -1,25 +1,20 @@
 import type { FC } from 'react'
-import { useState } from 'react'
-import { Empty, Typography } from 'antd'
+import { Empty, Spin, Typography } from 'antd'
 import { useTitle } from 'ahooks'
 import styles from '@/views/manage/common.module.scss'
 import type { PropsType } from '@/components/QuestionCard'
 import QuestionCard from '@/components/QuestionCard'
 import ListSearch from '@/components/ListSearch.tsx'
+import { useLoadQuestionListData } from '@/hooks/useLoadQuestionListData.ts'
+import ListPagination from '@/components/ListPagination.tsx'
 
 const { Title } = Typography
 
-const rawQuestionList = [{
-  _id: '1', // 服务端 mongodb ，自动，_id 不重复
-  title: '问卷1',
-  isStar: true,
-  isPublished: true,
-  answerCount: 100,
-  createdAt: '2024-09-04 22:30'
-}]
 const Star: FC = () => {
   useTitle('小星问卷 - 星标问卷')
-  const [questionList] = useState(rawQuestionList)
+
+  const { data, loading } = useLoadQuestionListData({ isStar: true })
+  const { list = [], total = 0 } = data?.data || {}
   return (
     <>
       <div className={styles.header}>
@@ -32,16 +27,19 @@ const Star: FC = () => {
       </div>
       <div className={styles.content}>
         {/* 问卷列表 */}
-        {questionList.length === 0 && <Empty description="暂无数据" />}
+        {loading && <div className="text-center"><Spin /></div>}
+        {!loading && list.length === 0 && <Empty description="暂无数据" />}
         {
-          questionList.length > 0
-          && questionList.map((q: PropsType) => {
+          list.length > 0
+          && list.map((q: PropsType) => {
             const { _id } = q
             return <QuestionCard key={_id} {...q} />
           })
         }
       </div>
-      <div className={styles.footer}>分页</div>
+      <div className={styles.footer}>
+        <ListPagination total={total} />
+      </div>
     </>
   )
 }

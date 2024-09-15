@@ -1,9 +1,10 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Button, Empty, Popconfirm, Space, Switch, Table, Tag, Typography, message } from 'antd'
+import { Button, Empty, Popconfirm, Space, Spin, Switch, Table, Tag, Typography, message } from 'antd'
 import { useTitle } from 'ahooks'
 import styles from '@/views/manage/common.module.scss'
-import ListSearch from "@/components/ListSearch.tsx";
+import ListSearch from '@/components/ListSearch.tsx'
+import { useLoadQuestionListData } from '@/hooks/useLoadQuestionListData.ts'
 
 const { Title } = Typography
 
@@ -35,19 +36,22 @@ const tableColumns = [
     dataIndex: 'createdAt'
   }
 ]
-const rawQuestionList = [{
-  _id: '1', // 服务端 mongodb ，自动，_id 不重复
-  title: '问卷1',
-  isStar: true,
-  isPublished: true,
-  answerCount: 100,
-  createdAt: '2024-09-04 22:30'
-}]
+// const rawQuestionList = [{
+//   _id: '1', // 服务端 mongodb ，自动，_id 不重复
+//   title: '问卷1',
+//   isStar: true,
+//   isPublished: true,
+//   answerCount: 100,
+//   createdAt: '2024-09-04 22:30'
+// }]
 
 const Trash: FC = () => {
   useTitle('小星问卷 - 回收站')
 
-  const [questionList] = useState(rawQuestionList)
+  // const [questionList] = useState(rawQuestionList)
+
+  const { data, loading } = useLoadQuestionListData({ isDeleted: true })
+  const { list = [], total = 0 } = data?.data || {}
 
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -57,34 +61,18 @@ const Trash: FC = () => {
 
   // 可以把 JSX 片段定义为一个变量
   const TableEle = (
-    <>
-      <div className="mb-4">
-        <Space>
-          <Button type="primary" disabled={selectedIds.length === 0}>恢复</Button>
-          <Popconfirm
-            title="彻底删除"
-            description="删除后不可恢复?"
-            onConfirm={del}
-            okText="确定"
-            cancelText="取消"
-          >
-            <Button danger disabled={selectedIds.length === 0}>彻底删除</Button>
-          </Popconfirm>
-        </Space>
-      </div>
-      <Table
-        rowKey="_id"
-        pagination={false}
-        dataSource={questionList}
-        columns={tableColumns}
-        rowSelection={{
-          type: 'checkbox',
-          onChange: (selectedRowKeys) => {
-            setSelectedIds(selectedRowKeys as string[])
-          }
-        }}
-      />
-    </>
+    <Table
+      rowKey="_id"
+      pagination={false}
+      dataSource={list}
+      columns={tableColumns}
+      rowSelection={{
+        type: 'checkbox',
+        onChange: (selectedRowKeys) => {
+          setSelectedIds(selectedRowKeys as string[])
+        }
+      }}
+    />
   )
 
   return (
@@ -98,9 +86,28 @@ const Trash: FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {questionList.length === 0 && <Empty description="暂无数据" />}
-        { questionList.length > 0 && TableEle}
+        <div className="mb-4">
+          <Space>
+            <Button type="primary" disabled={selectedIds.length === 0}>恢复</Button>
+            <Popconfirm
+              title="彻底删除"
+              description="删除后不可恢复?"
+              onConfirm={del}
+              okText="确定"
+              cancelText="取消"
+            >
+              <Button danger disabled={selectedIds.length === 0}>彻底删除</Button>
+            </Popconfirm>
+          </Space>
+        </div>
+        {loading && <div className="text-center"><Spin /></div>}
+        {!loading && list.length === 0 && <Empty description="暂无数据" />}
+        {list.length > 0 && TableEle}
       </div>
+      <h3>
+        总条数:
+        { total }
+      </h3>
     </>
   )
 }
