@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { Empty, Spin, Typography } from 'antd'
+import React, { useEffect, useRef, useState } from 'react'
+import { Divider, Empty, Spin, Typography } from 'antd'
 import { useDebounceFn, useRequest, useTitle } from 'ahooks'
 import { useSearchParams } from 'react-router-dom'
 import styles from '../common.module.scss'
@@ -25,6 +25,7 @@ const List: FC = () => {
 
   const { run: load, loading } = useRequest(
     async () => {
+      moreLoading.current = true
       return await getQuestionListApi({
         keyword: searchParams.get(LIST_SEARCH_PARAM_KEY) || '',
         page,
@@ -52,7 +53,6 @@ const List: FC = () => {
           return
         setPage(page + 1)
         load()
-        moreLoading.current = true
       }
     },
     {
@@ -96,7 +96,7 @@ const List: FC = () => {
       return <Empty description="暂无数据" />
 
     if (list.length >= total)
-      return <div className="bg-pink">暂无更多</div>
+      return <Divider style={{ fontSize: '14px', color: '#999' }}>我也是有底线的...</Divider>
   }
 
   return (
