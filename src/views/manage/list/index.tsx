@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom'
 import styles from '../common.module.scss'
 import ListSearch from '@/components/ListSearch.tsx'
 import { getQuestionListApi } from '@/api/question.ts'
-import { LIST_DEFAULT_PAGE_SIZE } from '@/constant'
+import { LIST_DEFAULT_PAGE_SIZE, LIST_SEARCH_PARAM_KEY } from '@/constant'
 import type { PropsType } from '@/components/QuestionCard'
 import QuestionCard from '@/components/QuestionCard'
 
@@ -17,17 +17,16 @@ const List: FC = () => {
 
   const [page, setPage] = useState(1)
   const [list, setList] = useState([])
+  const [total, setTotal] = useState(0)
   const moreLoading = useRef(false)
-  // const haveMoreData = total > list.length
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [searchParams] = useSearchParams() // url参数 虽然没有 page pageSize 但有keyword
 
   const { run: load, loading } = useRequest(
     async () => {
-      moreLoading.current = true
       return await getQuestionListApi({
-        keyword: searchParams.get('keyword') || '',
+        keyword: searchParams.get(LIST_SEARCH_PARAM_KEY) || '',
         page,
         pageSize: Number.parseInt(LIST_DEFAULT_PAGE_SIZE)
       })
@@ -35,9 +34,9 @@ const List: FC = () => {
     {
       manual: true,
       onSuccess(result) {
-        const { list: listData = [] } = result.data
+        const { list: listData = [], total: totalData } = result.data
         setList(list.concat(listData))
-        moreLoading.current = false
+        setTotal(totalData)
       }
     }
   )
@@ -48,9 +47,12 @@ const List: FC = () => {
       const scrollH = containerRef.current?.scrollHeight || 0
       const viewH = containerRef.current?.offsetHeight || 0
       const scrollTop = containerRef.current?.scrollTop || 0
-      if (scrollH - viewH - scrollTop <= 100) {
+      if ((scrollH - viewH - scrollTop <= 100)) {
+        if (page > 1 && (list.length >= total))
+          return
         setPage(page + 1)
         load()
+        moreLoading.current = true
       }
     },
     {
@@ -81,6 +83,22 @@ const List: FC = () => {
 
   const loadingMoreEl = <div style={contentStyle} />
 
+  const loadingMoreContentEle = () => {
+    if (!moreLoading.current || loading) {
+      return (
+        <div className="text-center">
+          <Spin tip="加载中..." size="large">{loadingMoreEl}</Spin>
+        </div>
+      )
+    }
+
+    if (list.length === 0)
+      return <Empty description="暂无数据" />
+
+    if (list.length >= total)
+      return <div className="bg-pink">暂无更多</div>
+  }
+
   return (
     <>
       <div className={styles.header}>
@@ -96,20 +114,11 @@ const List: FC = () => {
         ref={containerRef}
       >
         {/* 问卷列表 */}
-        {loading && !moreLoading && <div className="text-center"><Spin /></div>}
-        {!loading && list.length === 0 && <Empty description="暂无数据" />}
-        {
-          list.length > 0
-          && (list.map((q: PropsType) => {
-            const { _id } = q
-            return <QuestionCard key={_id} {...q} />
-          }))
-        }
-        {!loading || (moreLoading && (
-          <div className="text-center">
-            <Spin tip="加载中..." size="large">{loadingMoreEl}</Spin>
-          </div>
-        ))}
+        {list.length > 0 && list.map((q: PropsType) => {
+          const { _id } = q
+          return <QuestionCard key={_id} {...q} />
+        })}
+        {loadingMoreContentEle()}
       </div>
     </>
   )
