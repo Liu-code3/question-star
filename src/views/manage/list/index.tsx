@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Divider, Empty, Spin, Typography } from 'antd'
 import { useDebounceFn, useRequest, useTitle } from 'ahooks'
 import { useSearchParams } from 'react-router-dom'
@@ -18,16 +18,17 @@ const List: FC = () => {
   const [page, setPage] = useState(1)
   const [list, setList] = useState([])
   const [total, setTotal] = useState(0)
-  const moreLoading = useRef(false)
+  const started = useRef(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [searchParams] = useSearchParams() // url参数 虽然没有 page pageSize 但有keyword
+  const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
 
   const { run: load, loading } = useRequest(
     async () => {
-      moreLoading.current = true
+      started.current = true // 请求开始 解决 暂无数据视图比loading先出现
       return await getQuestionListApi({
-        keyword: searchParams.get(LIST_SEARCH_PARAM_KEY) || '',
+        keyword,
         page,
         pageSize: Number.parseInt(LIST_DEFAULT_PAGE_SIZE)
       })
@@ -60,6 +61,14 @@ const List: FC = () => {
     }
   )
 
+  // keyword变化时 重置信息
+  useEffect(() => {
+    started.current = false
+    setPage(1)
+    setList([])
+    setTotal(0)
+  }, [keyword])
+
   // 1.当页面加载, 或者url参数(keyword)变化时  触发加载
   useEffect(() => {
     tryLoadMore()
@@ -68,12 +77,12 @@ const List: FC = () => {
   // 2.当页面滚动的时候,要尝试触发加载
   useEffect(() => {
     const el = containerRef.current
-    el && el.addEventListener('scroll', tryLoadMore)
+    el && list.length <= total && el.addEventListener('scroll', tryLoadMore)
 
     return () => {
       el && el.removeEventListener('scroll', tryLoadMore)
     }
-  }, [searchParams])
+  }, [searchParams, list.length, total])
 
   const contentStyle: React.CSSProperties = {
     padding: 50,
@@ -81,13 +90,13 @@ const List: FC = () => {
     borderRadius: 4,
   }
 
-  const loadingMoreEl = <div style={contentStyle} />
-
-  const loadingMoreContentEle = () => {
-    if (!moreLoading.current || loading) {
+  const loadingMoreContentEle = useMemo(() => {
+    if (!started.current || loading) {
       return (
         <div className="text-center">
-          <Spin tip="加载中..." size="large">{loadingMoreEl}</Spin>
+          <Spin tip="加载中..." size="large">
+            <div style={contentStyle} />
+          </Spin>
         </div>
       )
     }
@@ -97,7 +106,7 @@ const List: FC = () => {
 
     if (list.length >= total)
       return <Divider style={{ fontSize: '14px', color: '#999' }}>我也是有底线的...</Divider>
-  }
+  }, [loading, list.length, total])
 
   return (
     <>
@@ -118,7 +127,7 @@ const List: FC = () => {
           const { _id } = q
           return <QuestionCard key={_id} {...q} />
         })}
-        {loadingMoreContentEle()}
+        {loadingMoreContentEle}
       </div>
     </>
   )
