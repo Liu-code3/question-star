@@ -28,8 +28,21 @@ function getQuestionListApi(options: Partial<SearchType>) {
   })
 }
 
+/**
+ * 更新问题
+ */
+function updateQuestionItemApi<T>(id: string, options: { [key: string]: T }) {
+  return requset.patch(`/question/${id}`, { ...options })
+}
+
+function duplicateQuestionApi(id: string) {
+  return requset.post(`/question/duplicate/${id}`)
+}
+
 export {
   testApi,
   createQuestionApi,
-  getQuestionListApi
+  getQuestionListApi,
+  updateQuestionItemApi,
+  duplicateQuestionApi
 }
