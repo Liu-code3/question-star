@@ -4,7 +4,7 @@ export default antfu({
   react: true,
   typescript: {
     overrides: {
-      'ts/no-unused-expressions': ['error', { allowTernary: true }]
+      'ts/no-unused-expressions': 'off'
     }
   },
   formatters: true,
