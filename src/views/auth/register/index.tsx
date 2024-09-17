@@ -1,10 +1,12 @@
 import type { FC } from 'react'
 
-import { Button, Form, Input, Space, Typography } from 'antd'
+import { Button, Form, Input, Space, Typography, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useRequest } from 'ahooks'
 import styles from '../auth.module.scss'
 import { LOGIN_PATHNAME } from '@/router/constant.ts'
+import { registerApi } from '@/api/auth.ts'
 
 interface FormType {
   username: string
@@ -15,8 +17,28 @@ interface FormType {
 
 const { Title } = Typography
 const Register: FC = () => {
+  const navigate = useNavigate()
+  const { run } = useRequest(
+    async (username: string, password: string, nickname: string) => {
+      const dataParams = {
+        username,
+        password,
+        nickname
+      }
+      const res = await registerApi(dataParams)
+      return res
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('注册成功')
+        navigate(LOGIN_PATHNAME)
+      }
+    }
+  )
   const onFinish = (value: FormType) => {
-    console.log('=>(index.tsx:14) value', value)
+    const { username, password, nickname } = value || {}
+    run(username, password, nickname)
   }
 
   return (

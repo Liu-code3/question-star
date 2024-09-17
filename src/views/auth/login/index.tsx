@@ -1,12 +1,14 @@
 import type { FC } from 'react'
 import { useEffect } from 'react'
 
-import { Button, Checkbox, Form, Input, Space, Typography } from 'antd'
+import { Button, Checkbox, Form, Input, Space, Typography, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useRequest } from 'ahooks'
 import styles from '../auth.module.scss'
-import { REGISTER_PATHNAME } from '@/router/constant.ts'
+import { MANAGE_INDEX_PATHNAME, REGISTER_PATHNAME } from '@/router/constant.ts'
 import { localCache } from '@/utils/cache.ts'
+import { loginApi } from '@/api/auth.ts'
 
 interface FormType {
   username: string
@@ -34,13 +36,34 @@ function getUserInfoFromStore() {
 }
 
 const Login: FC = () => {
+  const navigate = useNavigate()
   const [form] = Form.useForm()
   useEffect(() => {
     const { username, password } = getUserInfoFromStore()
     form.setFieldsValue({ username, password })
   }, [form])
+
+  const { run } = useRequest(
+    async (username: string, password: string) => {
+      const dataParams = {
+        username,
+        password
+      }
+      const res = await loginApi(dataParams)
+      return res
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('登录成功')
+        navigate(MANAGE_INDEX_PATHNAME)
+      }
+    }
+  )
+
   const onFinish = (value: FormType) => {
     const { username, password, remember } = value
+    run(username, password)
     remember ? rememberUser(username, password) : deleteUserFromStore()
   }
 
