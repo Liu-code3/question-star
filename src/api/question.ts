@@ -39,10 +39,15 @@ function duplicateQuestionApi(id: string) {
   return requset.post(`/question/duplicate/${id}`)
 }
 
+function deleteQuestionByIdsApi(ids: string[]) {
+  return requset.delete(`/question`, { data: ids })
+}
+
 export {
   testApi,
   createQuestionApi,
   getQuestionListApi,
   updateQuestionItemApi,
-  duplicateQuestionApi
+  duplicateQuestionApi,
+  deleteQuestionByIdsApi
 }

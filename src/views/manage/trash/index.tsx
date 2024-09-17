@@ -5,7 +5,7 @@ import { useRequest, useTitle } from 'ahooks'
 import styles from '@/views/manage/common.module.scss'
 import ListSearch from '@/components/ListSearch.tsx'
 import { useLoadQuestionListData } from '@/hooks/useLoadQuestionListData.ts'
-import { updateQuestionItemApi } from '@/api/question.ts'
+import { deleteQuestionByIdsApi, updateQuestionItemApi } from '@/api/question.ts'
 
 const { Title } = Typography
 
@@ -60,14 +60,28 @@ const Trash: FC = () => {
       manual: true,
       debounceWait: 300, // 防抖操作 防止重复提交
       onSuccess() {
-        message.success('恢复成功')
-        refresh() // 手动刷新列表
+        resetSelectedIds('恢复成功')
       }
     }
   )
 
-  async function del() {
-    message.success('删除成功')
+  // 删除
+  const { run: deleteQuestionItem } = useRequest(
+    async () => await deleteQuestionByIdsApi(selectedIds),
+    {
+      manual: true,
+      debounceWait: 300,
+      onSuccess() {
+        resetSelectedIds('删除成功')
+      }
+    }
+  )
+
+  /** 重置选中的ID列表 */
+  function resetSelectedIds(msg: string) {
+    message.success(msg)
+    refresh()
+    setSelectedIds([])
   }
 
   // 可以把 JSX 片段定义为一个变量
@@ -109,7 +123,7 @@ const Trash: FC = () => {
             <Popconfirm
               title="彻底删除"
               description="删除后不可恢复?"
-              onConfirm={del}
+              onConfirm={deleteQuestionItem}
               okText="确定"
               cancelText="取消"
             >
