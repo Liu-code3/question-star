@@ -20,19 +20,16 @@ const UserInfo: FC = () => {
     navigate(LOGIN_PATHNAME)
   }
 
-  const UserInfo = () => {
-    return (
-      <>
-        <span className="text-#e8e8e8">
-          <UserOutlined />
-          { nickname || username}
-        </span>
-        <Button type="link" onClick={logout}>登出</Button>
-      </>
-    )
-  }
-
-  const Login = () => <Link to={LOGIN_PATHNAME}>登录</Link>
+  const UserInfo = (
+    <>
+      <span className="text-#e8e8e8">
+        <UserOutlined />
+        { nickname || username}
+      </span>
+      <Button type="link" onClick={logout}>登出</Button>
+    </>
+  )
+  const Login = <Link to={LOGIN_PATHNAME}>登录</Link>
 
   function getToken(): string {
     return localCache.getCache(requestConfig.TOKEN_NAME) || ''
@@ -40,7 +37,7 @@ const UserInfo: FC = () => {
 
   return (
     <>
-      { getToken() ? <UserInfo /> : <Login /> }
+      { getToken() ? UserInfo : Login }
     </>
   )
 }
