@@ -9,6 +9,7 @@ import styles from '../auth.module.scss'
 import { MANAGE_INDEX_PATHNAME, REGISTER_PATHNAME } from '@/router/constant.ts'
 import { localCache } from '@/utils/cache.ts'
 import { loginApi } from '@/api/auth.ts'
+import {requestConfig} from "@/utils/http/config.ts";
 
 interface FormType {
   username: string
@@ -54,7 +55,8 @@ const Login: FC = () => {
     },
     {
       manual: true,
-      onSuccess() {
+      onSuccess(result) {
+        localCache.setCache(requestConfig.TOKEN_NAME, result.data)
         message.success('登录成功')
         navigate(MANAGE_INDEX_PATHNAME)
       }

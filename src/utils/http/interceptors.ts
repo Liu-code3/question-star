@@ -1,4 +1,9 @@
-import type { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import type {
+  AxiosError,
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig
+} from 'axios'
 import { message } from 'antd'
 import { localCache } from '../cache.ts'
 
@@ -7,7 +12,6 @@ import { handlerError, reloadCodes, requestConfig, successCodes } from './config
 export function setupInterceptors(axiosInstance: AxiosInstance) {
   function reqResolve(config: InternalAxiosRequestConfig) {
     const token = localCache.getCache(requestConfig.TOKEN_NAME)
-
     if (token)
       config.headers[requestConfig.TOKEN_NAME] = requestConfig.TOKEN_PREFIX + token
 
