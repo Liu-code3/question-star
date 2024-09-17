@@ -69,6 +69,7 @@ const QuestionCard: FC<PropsType> = (props) => {
     })
   }
 
+  // 已经被删除的就不再渲染卡片了
   if (isDeleteState.current)
     return null
 

@@ -1,10 +1,11 @@
 import type { FC } from 'react'
 import { useState } from 'react'
 import { Button, Empty, Popconfirm, Space, Spin, Switch, Table, Tag, Typography, message } from 'antd'
-import { useTitle } from 'ahooks'
+import { useRequest, useTitle } from 'ahooks'
 import styles from '@/views/manage/common.module.scss'
 import ListSearch from '@/components/ListSearch.tsx'
 import { useLoadQuestionListData } from '@/hooks/useLoadQuestionListData.ts'
+import { updateQuestionItemApi } from '@/api/question.ts'
 
 const { Title } = Typography
 
@@ -36,24 +37,34 @@ const tableColumns = [
     dataIndex: 'createdAt'
   }
 ]
-// const rawQuestionList = [{
-//   _id: '1', // 服务端 mongodb ，自动，_id 不重复
-//   title: '问卷1',
-//   isStar: true,
-//   isPublished: true,
-//   answerCount: 100,
-//   createdAt: '2024-09-04 22:30'
-// }]
 
 const Trash: FC = () => {
   useTitle('小星问卷 - 回收站')
 
-  // const [questionList] = useState(rawQuestionList)
-
-  const { data, loading } = useLoadQuestionListData({ isDeleted: true })
+  const { data, loading, refresh } = useLoadQuestionListData({ isDeleted: true })
   const { list = [], total = 0 } = data?.data || {}
 
+  // 记录选中的  id 列表
   const [selectedIds, setSelectedIds] = useState<string[]>([])
+
+  // 恢复
+  const { run: recover } = useRequest(
+    async () => {
+      // 遍历选中的问题ID，逐个恢复它们的状态
+      for await (const id of selectedIds) {
+        // 调用API恢复问题项的状态，将删除标记设为false
+        await updateQuestionItemApi(id, { isDeleted: false })
+      }
+    },
+    {
+      manual: true,
+      debounceWait: 300, // 防抖操作 防止重复提交
+      onSuccess() {
+        message.success('恢复成功')
+        refresh() // 手动刷新列表
+      }
+    }
+  )
 
   async function del() {
     message.success('删除成功')
@@ -88,7 +99,13 @@ const Trash: FC = () => {
       <div className={styles.content}>
         <div className="mb-4">
           <Space>
-            <Button type="primary" disabled={selectedIds.length === 0}>恢复</Button>
+            <Button
+              type="primary"
+              disabled={selectedIds.length === 0}
+              onClick={recover}
+            >
+              恢复
+            </Button>
             <Popconfirm
               title="彻底删除"
               description="删除后不可恢复?"
