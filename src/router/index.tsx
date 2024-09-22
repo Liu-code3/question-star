@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Suspense, lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import Loading from '@/components/loading'
 
 const MainLayout = lazy(() => import('@/layouts/MainLayout.tsx'))
 const Home = lazy(() => import('@/views/home/index.tsx'))
@@ -23,8 +24,8 @@ const NotFound = lazy(() => import('@/views/NotFound/404.tsx'))
  */
 function lazyComponent(element: ReactNode): ReactNode {
   return (
-    <Suspense fallback={<div>loading...</div>}>
-      { element}
+    <Suspense fallback={<Loading />}>
+      {element}
     </Suspense>
   )
 }
