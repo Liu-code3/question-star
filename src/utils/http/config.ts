@@ -34,7 +34,7 @@ const errorCodeMap: { [key: number]: string } = {
 function handlerError(error: AxiosError) {
   const status = error.response && error.response.status
   const description = status && errorCodeMap[status]
-  message.error(`${description}`)
+  message.error(description)
 }
 
 export {

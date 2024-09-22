@@ -23,7 +23,7 @@ export function useLoadQuestionListData(options: Partial<TQuestionListItem> = {}
 
   const [searchParams] = useSearchParams()
 
-  const { data, loading, error,refresh } = useRequest(
+  const { data, loading, error, refresh } = useRequest(
     () => loadData(searchParams, isDeleted, isStar),
     {
       refreshDeps: [searchParams] // 刷新的依赖项 (useRequest也是基于useEffect的)
