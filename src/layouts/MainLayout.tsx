@@ -4,10 +4,14 @@ import { Outlet } from 'react-router-dom'
 import styles from './MainLayout.module.scss'
 import Logo from '@/components/Logo/index.tsx'
 import UserInfo from '@/components/UserInfo'
+import { useLoadUserData } from '@/hooks/useLoadUserData.ts'
+import { useNavPage } from '@/hooks/useNavPage.ts'
 
 const { Header, Footer, Content } = Layout
 
 const MainLayout: FC = () => {
+  const { waitingUserData } = useLoadUserData()
+  useNavPage(waitingUserData)
   return (
     <Layout>
       <Header className={styles.header}>
