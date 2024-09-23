@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import styles from './index.module.scss'
+import QuestionTitle from '@/components/QuestionComponent/QuestionTitle/Component.tsx'
 
 const Edit: FC = () => {
   return (
@@ -9,7 +10,10 @@ const Edit: FC = () => {
         <div className={styles.content}>
           <div className={styles.left}>left</div>
           <div className={styles.main}>
-            <div className={styles['canvas-wrapper']}>main</div>
+            <div className={styles['canvas-wrapper']}>
+              <QuestionTitle></QuestionTitle>
+                <div>1</div>
+            </div>
           </div>
           <div className={styles.right}>right</div>
         </div>
