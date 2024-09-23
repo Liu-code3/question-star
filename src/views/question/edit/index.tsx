@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import styles from './index.module.scss'
-import QuestionTitle from '@/components/QuestionComponent/QuestionTitle/Component.tsx'
+import QuestionInput from "@/components/QuestionComponent/QuestionInput/Component.tsx";
 
 const Edit: FC = () => {
   return (
@@ -11,8 +11,7 @@ const Edit: FC = () => {
           <div className={styles.left}>left</div>
           <div className={styles.main}>
             <div className={styles['canvas-wrapper']}>
-              <QuestionTitle></QuestionTitle>
-                <div>1</div>
+              <QuestionInput></QuestionInput>
             </div>
           </div>
           <div className={styles.right}>right</div>
