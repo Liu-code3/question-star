@@ -6,6 +6,7 @@ import { QuestionTitleDefaultProps } from './type'
 
 export * from './type'
 
+// Title 组件配置
 export default {
   title: '标题',
   type: 'questionTitle', // 需与后端一致
