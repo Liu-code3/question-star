@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import type { ComponentPropsType } from '@/components/QuestionComponent'
 
-export interface ComponentInfoType {
+export interface IComponentInfo {
   fe_id: string
   type: string
   title: string
@@ -10,7 +10,7 @@ export interface ComponentInfoType {
 }
 
 export interface IComponentsState {
-  componentList: ComponentInfoType[]
+  componentList: IComponentInfo[]
 }
 
 const INIT_STATE: IComponentsState = {
