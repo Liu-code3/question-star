@@ -29,6 +29,12 @@ function getQuestionListApi(options: Partial<SearchType>) {
 }
 
 /**
+ * 获取问题详情
+ */
+function getQuestionItemApi(id: string) {
+  return requset.get(`/question/${id}`)
+}
+/**
  * 更新问题
  */
 function updateQuestionItemApi<T>(id: string, options: { [key: string]: T }) {
@@ -47,6 +53,7 @@ export {
   testApi,
   createQuestionApi,
   getQuestionListApi,
+  getQuestionItemApi,
   updateQuestionItemApi,
   duplicateQuestionApi,
   deleteQuestionByIdsApi

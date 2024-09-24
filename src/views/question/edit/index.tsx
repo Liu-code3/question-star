@@ -1,7 +1,10 @@
 import type { FC } from 'react'
 import styles from './index.module.scss'
+import EditCanvas from '@/views/question/edit/EditCanvas'
+import { useLoadQuestionData } from '@/hooks/useLoadQuestionData.ts'
 
 const Edit: FC = () => {
+  const { loading } = useLoadQuestionData()
   return (
     <div className={styles.container}>
       <div className="h-10 bg-#fff">Header</div>
@@ -10,7 +13,7 @@ const Edit: FC = () => {
           <div className={styles.left}>left</div>
           <div className={styles.main}>
             <div className={styles['canvas-wrapper']}>
-              main
+              <EditCanvas loading={loading} />
             </div>
           </div>
           <div className={styles.right}>right</div>
