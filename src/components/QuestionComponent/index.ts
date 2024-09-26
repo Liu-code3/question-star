@@ -19,5 +19,5 @@ export interface IComponentConfig {
 const componentConfigList: IComponentConfig[] = [QuestionTitleConfig, QuestionInputConfig]
 
 export function getComponentConfigByType(type: string) {
-    return componentConfigList.find(item => item.type === type)
+  return componentConfigList.find(item => item.type === type)
 }

@@ -29,7 +29,9 @@ export function useLoadQuestionData() {
     const { componentList = [] } = data?.data || {}
 
     dispatch(resetComponents({ componentList }))
-  }, [data])
+    // eslint-disable-next-line ts/ban-ts-comment
+    // @ts-expect-error
+  }, [data?.data])
 
   // 判断 id 变化, 执行 ajax 加载问卷数据
   useEffect(() => {
