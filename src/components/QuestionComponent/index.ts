@@ -11,7 +11,8 @@ type ComponentPropsType = IQuestionInputProps & IQuestionTitleProps
 interface IComponentConfig {
   title: string
   type: string
-  Component: FC<ComponentPropsType>
+  Component: FC<ComponentPropsType> // 画布所需要的组件
+  PropComponent: FC<ComponentPropsType> // 右侧面板所需要的属性组件
   defaultProps: ComponentPropsType
 }
 

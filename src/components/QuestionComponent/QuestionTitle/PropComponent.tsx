@@ -15,6 +15,7 @@ const PropComponent: FC<IQuestionTitleProps> = (props) => {
     <Form
       layout="vertical"
       initialValues={{ level, text, isCenter }}
+      form={form}
     >
       <Form.Item
         label="标题内容"
