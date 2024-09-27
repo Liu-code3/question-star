@@ -4,18 +4,26 @@ import { useEffect } from 'react'
 import type { IQuestionTitleProps } from './type'
 
 const PropComponent: FC<IQuestionTitleProps> = (props) => {
-  const { level, text, isCenter } = props
+  const { level, text, isCenter, onChange } = props
 
   const [form] = Form.useForm()
   useEffect(() => {
     form.setFieldsValue({ level, text, isCenter })
   }, [level, text, isCenter])
 
+  function handleValueChange() {
+    if (!onChange)
+      return
+
+    onChange(form.getFieldsValue())
+  }
+
   return (
     <Form
       layout="vertical"
       initialValues={{ level, text, isCenter }}
       form={form}
+      onValuesChange={handleValueChange}
     >
       <Form.Item
         label="标题内容"

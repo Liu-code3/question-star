@@ -4,22 +4,31 @@ import { Form, Input } from 'antd'
 import type { IQuestionInputProps } from './type'
 
 const PropComponent: FC<IQuestionInputProps> = (props) => {
-  const { title, placeholder } = props
+  const { title, placeholder, onChange } = props
 
   const [form] = Form.useForm()
   useEffect(() => {
     form.setFieldsValue({ title, placeholder })
   }, [title, placeholder])
+
+  function handleValueChange() {
+    if (!onChange)
+      return
+
+    onChange(form.getFieldsValue())
+  }
+
   return (
     <Form
       layout="vertical"
       initialValues={{ title, placeholder }}
       form={form}
+      onValuesChange={handleValueChange}
     >
       <Form.Item
-          label="标题内容"
-          name="title"
-          rules={[{ required: true, message: '请输入标题内容' }]}
+        label="标题内容"
+        name="title"
+        rules={[{ required: true, message: '请输入标题内容' }]}
       >
         <Input />
       </Form.Item>

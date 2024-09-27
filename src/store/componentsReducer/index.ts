@@ -25,7 +25,7 @@ const componentSlice = createSlice({
   initialState: INIT_STATE,
   reducers: {
     // 重置所有组件
-    resetComponents(_: IComponentsState, action: PayloadAction<IComponentsState>) {
+    resetComponents: (_: IComponentsState, action: PayloadAction<IComponentsState>) => {
       return action.payload
     },
     // 修改 selectedId
@@ -44,11 +44,28 @@ const componentSlice = createSlice({
       else {
         componentList.splice(index + 1, 0, newComponent)
       }
+    }),
+    // 修改组件信息
+    changeComponentProps: produce((darft: IComponentsState, action: PayloadAction<{ fe_id: string, newProps: Partial<ComponentPropsType> }>) => {
+      const { fe_id, newProps } = action.payload
+      // 当前需要修改属性的这个组件
+      const curComp = darft.componentList.find(c => c.fe_id === fe_id)
+      if (curComp) {
+        curComp.props = {
+          ...curComp.props,
+          ...newProps
+        }
+      }
     })
   }
 })
 
-export const { resetComponents, changeSelectedId,  addComponent } = componentSlice.actions
+export const {
+  resetComponents,
+  changeSelectedId,
+  addComponent,
+  changeComponentProps
+} = componentSlice.actions
 export default componentSlice.reducer
 
 export type {

@@ -1,6 +1,8 @@
 interface IQuestionInputProps {
   title?: string
   placeholder?: string
+
+  onChange?: (newProps: IQuestionInputProps) => void
 }
 
 const QuestionInputDefaultProps: IQuestionInputProps = {

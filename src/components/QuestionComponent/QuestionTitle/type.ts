@@ -2,6 +2,8 @@ interface IQuestionTitleProps {
   level?: 1 | 2 | 3 | 4 | 5
   text?: string
   isCenter?: boolean
+
+  onChange?: (newProps: IQuestionTitleProps) =>  void
 }
 
 const QuestionTitleDefaultProps: IQuestionTitleProps = {
