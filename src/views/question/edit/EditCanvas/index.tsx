@@ -39,7 +39,7 @@ const EditCanvas: FC<IEditCanvasProps> = ({ loading }) => {
   return (
     // 这里html分层 需要借鉴 单一组件原则
     <div className={styles.canvas}>
-      {componentList.map((c) => {
+      {componentList.filter(c => !c.isHidden).map((c) => {
         const wrapperClassName = classnames({
           [styles['component-wrapper']]: true,
           [styles.selected]: c.fe_id === selectedId
