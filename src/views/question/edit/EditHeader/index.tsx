@@ -3,6 +3,7 @@ import { Button, Space } from 'antd'
 import { CheckOutlined, LeftOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import styles from './index.module.scss'
+import EditToolbar from './EditToolbar'
 
 const EditHeader: FC = () => {
   const navigate = useNavigate()
@@ -18,7 +19,9 @@ const EditHeader: FC = () => {
             返回
           </Button>
         </div>
-        <div className={styles.main}>center</div>
+        <div className={styles.main}>
+          <EditToolbar />
+        </div>
         <div className={styles.right}>
           <Space>
             <Button icon={<CheckOutlined />}>保存</Button>

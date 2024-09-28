@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import { produce } from 'immer'
+import { getNextSelectedId } from './utils.ts'
 import type { ComponentPropsType } from '@/components/QuestionComponent'
 
 interface IComponentInfo {
@@ -56,7 +57,21 @@ const componentSlice = createSlice({
           ...newProps
         }
       }
-    })
+    }),
+    // 删除组件
+    removeSelectedComponent: produce(
+      (darft: IComponentsState) => {
+        const { componentList, selectedId } = darft
+
+        // 重新计算  selectedId
+        darft.selectedId = getNextSelectedId(selectedId, componentList)
+
+        const delIndex = componentList.findIndex(c => c.fe_id === selectedId)
+        if (delIndex < 0)
+          return
+        componentList.splice(delIndex, 1)
+      }
+    )
   }
 })
 
@@ -64,7 +79,8 @@ export const {
   resetComponents,
   changeSelectedId,
   addComponent,
-  changeComponentProps
+  changeComponentProps,
+  removeSelectedComponent
 } = componentSlice.actions
 export default componentSlice.reducer
 
