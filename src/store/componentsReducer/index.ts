@@ -84,8 +84,8 @@ const componentSlice = createSlice({
       (darft: IComponentsState, action: PayloadAction<{ fe_id: string, isHidden: boolean }>) => {
         const { componentList = [] } = darft
         const { fe_id, isHidden } = action.payload
-
-        darft.selectedId = getNextSelectedId(fe_id, componentList)
+        // 重新计算  selectId
+        darft.selectedId = isHidden ? getNextSelectedId(fe_id, componentList) : fe_id
 
         const curComp = darft.componentList.find(c => c.fe_id === fe_id)
         if (curComp)
