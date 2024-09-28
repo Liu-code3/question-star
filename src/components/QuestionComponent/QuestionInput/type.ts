@@ -3,6 +3,7 @@ interface IQuestionInputProps {
   placeholder?: string
 
   onChange?: (newProps: IQuestionInputProps) => void
+  disabled?: boolean
 }
 
 const QuestionInputDefaultProps: IQuestionInputProps = {

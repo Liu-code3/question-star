@@ -9,6 +9,7 @@ interface IComponentInfo {
   type: string
   title: string
   isHidden?: boolean
+  isLocked?: boolean
   props: ComponentPropsType
 }
 
@@ -91,6 +92,16 @@ const componentSlice = createSlice({
         if (curComp)
           curComp.isHidden = isHidden
       }
+    ),
+    // 锁定/解锁 组件
+    changeComponentLocked: produce(
+      (darft: IComponentsState, action: PayloadAction<{ fe_id: string }>) => {
+        const { fe_id } = action.payload
+        const curComp = darft.componentList.find(c => c.fe_id === fe_id)
+        if (curComp) {
+          curComp.isLocked = !curComp.isLocked
+        }
+      }
     )
   }
 })
@@ -101,7 +112,8 @@ export const {
   addComponent,
   changeComponentProps,
   removeSelectedComponent,
-  changeComponentHidden
+  changeComponentHidden,
+  changeComponentLocked
 } = componentSlice.actions
 export default componentSlice.reducer
 

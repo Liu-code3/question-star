@@ -39,24 +39,27 @@ const EditCanvas: FC<IEditCanvasProps> = ({ loading }) => {
   return (
     // 这里html分层 需要借鉴 单一组件原则
     <div className={styles.canvas}>
-      {componentList.filter(c => !c.isHidden).map((c) => {
-        const wrapperClassName = classnames({
-          [styles['component-wrapper']]: true,
-          [styles.selected]: c.fe_id === selectedId
-        })
+      {componentList
+        .filter(c => !c.isHidden)
+        .map((c) => {
+          const wrapperClassName = classnames({
+            [styles['component-wrapper']]: true,
+            [styles.selected]: c.fe_id === selectedId,
+            [styles.locked]: c.isLocked
+          })
 
-        return (
-          <div
-            key={c.fe_id}
-            className={wrapperClassName}
-            onClick={e => handleClick(e, c.fe_id)}
-          >
-            <div className={styles.component}>
-              {GenComponent(c)}
+          return (
+            <div
+              key={c.fe_id}
+              className={wrapperClassName}
+              onClick={e => handleClick(e, c.fe_id)}
+            >
+              <div className={styles.component}>
+                {GenComponent(c)}
+              </div>
             </div>
-          </div>
-        )
-      })}
+          )
+        })}
     </div>
   )
 }

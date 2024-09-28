@@ -3,7 +3,8 @@ interface IQuestionTitleProps {
   text?: string
   isCenter?: boolean
 
-  onChange?: (newProps: IQuestionTitleProps) =>  void
+  onChange?: (newProps: IQuestionTitleProps) => void
+  disabled?: boolean
 }
 
 const QuestionTitleDefaultProps: IQuestionTitleProps = {

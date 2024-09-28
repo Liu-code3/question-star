@@ -4,7 +4,13 @@ import { useEffect } from 'react'
 import type { IQuestionTitleProps } from './type'
 
 const PropComponent: FC<IQuestionTitleProps> = (props) => {
-  const { level, text, isCenter, onChange } = props
+  const {
+    level,
+    text,
+    isCenter,
+    onChange,
+    disabled
+  } = props
 
   const [form] = Form.useForm()
   useEffect(() => {
@@ -24,6 +30,7 @@ const PropComponent: FC<IQuestionTitleProps> = (props) => {
       initialValues={{ level, text, isCenter }}
       form={form}
       onValuesChange={handleValueChange}
+      disabled={disabled}
     >
       <Form.Item
         label="标题内容"
