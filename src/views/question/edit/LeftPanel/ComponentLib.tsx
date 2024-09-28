@@ -5,6 +5,7 @@ import styles from './ComponentLib.module.scss'
 import type { IComponentConfig } from '@/components/QuestionComponent'
 import { componentConfigGroup } from '@/components/QuestionComponent'
 import { addComponent } from '@/store/componentsReducer'
+import { nanoid } from "nanoid";
 
 const { Title } = Typography
 
@@ -14,7 +15,7 @@ function GenComponent(c: IComponentConfig) {
 
   function handleClick() {
     dispatch(addComponent({
-      fe_id: `${Date.now()}`,
+      fe_id: nanoid(),
       type,
       title,
       props: defaultProps

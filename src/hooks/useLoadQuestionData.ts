@@ -27,8 +27,9 @@ export function useLoadQuestionData() {
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
     const { componentList = [] } = data?.data || {}
+    const selectedId = componentList.length > 0 ? componentList[0]?.fe_id : '' // 默认选中第一个组件
 
-    dispatch(resetComponents({ componentList }))
+    dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }))
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
   }, [data?.data])
