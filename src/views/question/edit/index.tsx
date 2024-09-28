@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import styles from './index.module.scss'
 import { useLoadQuestionData } from '@/hooks/useLoadQuestionData.ts'
 import { changeSelectedId } from '@/store/componentsReducer'
+import EditHeader from '@/views/question/edit/EditHeader'
 import LeftPanel from '@/views/question/edit/LeftPanel'
 import EditCanvas from '@/views/question/edit/EditCanvas'
 import RightPanel from '@/views/question/edit/RightPanel'
@@ -16,7 +17,7 @@ const Edit: FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className="h-10 bg-#fff">Header</div>
+      <EditHeader />
       <div className={styles['content-wrapper']}>
         <div className={styles.content}>
           <div className={styles.left}>
