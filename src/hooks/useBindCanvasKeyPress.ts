@@ -1,6 +1,12 @@
 import { useDispatch } from 'react-redux'
 import { useKeyPress } from 'ahooks'
-import { copyComponent, pasteComponent, removeSelectedComponent } from '@/store/componentsReducer'
+import {
+  copyComponent,
+  pasteComponent,
+  removeSelectedComponent,
+  selectNextComponent,
+  selectPrevComponent
+} from '@/store/componentsReducer'
 
 /**
  * 判断当前激活元素是否为body 光标所在的元素
@@ -33,6 +39,20 @@ function useBindCanvasKeyPress() {
     if (!isActiveElementValid)
       return
     dispatch(pasteComponent())
+  })
+
+  // 选中上一个组件
+  useKeyPress('uparrow', () => {
+    if (!isActiveElementValid)
+      return
+    dispatch(selectPrevComponent())
+  })
+
+  //   选中下一个组件
+  useKeyPress('downarrow', () => {
+    if (!isActiveElementValid)
+      return
+    dispatch(selectNextComponent())
   })
 }
 
