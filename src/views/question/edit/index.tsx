@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useDispatch } from 'react-redux'
 import styles from './index.module.scss'
 import { useLoadQuestionData } from '@/hooks/useLoadQuestionData.ts'
+import useBindCanvasKeyPress from '@/hooks/useBindCanvasKeyPress.ts'
 import { changeSelectedId } from '@/store/componentsReducer'
 import EditHeader from '@/views/question/edit/EditHeader'
 import LeftPanel from '@/views/question/edit/LeftPanel'
@@ -14,6 +15,8 @@ const Edit: FC = () => {
   function clearSelectedId() {
     dispatch(changeSelectedId(''))
   }
+
+  useBindCanvasKeyPress()
 
   return (
     <div className={styles.container}>
