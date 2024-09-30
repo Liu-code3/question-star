@@ -3,13 +3,19 @@ import type { IQuestionInputProps } from './QuestionInput'
 import type { IQuestionTitleProps } from './QuestionTitle'
 import type { IQuestionParagraphProps } from './QuestionParagraph'
 import type { IQuestionInfoProps } from './QuestionInfo'
+import type { IQuestionTextareaProps } from "./QuestionTextarea";
 import QuestionTitleConfig from './QuestionTitle'
 import QuestionInputConfig from './QuestionInput'
 import QuestionParagraphConfig from './QuestionParagraph'
 import QuestionInfoConfig from './QuestionInfo'
+import QuestionTextareaConfig from './QuestionTextarea'
 
 // 各个组件的 prop  type
-type ComponentPropsType = IQuestionInputProps & IQuestionTitleProps & IQuestionParagraphProps & IQuestionInfoProps
+type ComponentPropsType = IQuestionInputProps
+    & IQuestionTitleProps
+    & IQuestionParagraphProps
+    & IQuestionInfoProps
+    & IQuestionTextareaProps
 
 // 组件的配置
 interface IComponentConfig {
@@ -25,7 +31,8 @@ const componentConfigList: IComponentConfig[] = [
   QuestionTitleConfig,
   QuestionInputConfig,
   QuestionParagraphConfig,
-  QuestionInfoConfig
+  QuestionInfoConfig,
+  QuestionTextareaConfig
 ]
 
 // 组件分组
@@ -38,7 +45,7 @@ const componentConfigGroup = [
   {
     groupId: 'inputGroup',
     groupName: '用户输入',
-    conponents: [QuestionInputConfig]
+    conponents: [QuestionTextareaConfig, QuestionInputConfig]
   }
 ]
 
