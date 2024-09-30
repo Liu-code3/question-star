@@ -2,12 +2,14 @@ import type { FC } from 'react'
 import type { IQuestionInputProps } from './QuestionInput'
 import type { IQuestionTitleProps } from './QuestionTitle'
 import type { IQuestionParagraphProps } from './QuestionParagraph'
+import type { IQuestionInfoProps } from './QuestionInfo'
 import QuestionTitleConfig from './QuestionTitle'
 import QuestionInputConfig from './QuestionInput'
 import QuestionParagraphConfig from './QuestionParagraph'
+import QuestionInfoConfig from './QuestionInfo'
 
 // 各个组件的 prop  type
-type ComponentPropsType = IQuestionInputProps & IQuestionTitleProps & IQuestionParagraphProps
+type ComponentPropsType = IQuestionInputProps & IQuestionTitleProps & IQuestionParagraphProps & IQuestionInfoProps
 
 // 组件的配置
 interface IComponentConfig {
@@ -19,14 +21,19 @@ interface IComponentConfig {
 }
 
 //  全部组件配置的列表
-const componentConfigList: IComponentConfig[] = [QuestionTitleConfig, QuestionInputConfig, QuestionParagraphConfig]
+const componentConfigList: IComponentConfig[] = [
+  QuestionTitleConfig,
+  QuestionInputConfig,
+  QuestionParagraphConfig,
+  QuestionInfoConfig
+]
 
 // 组件分组
 const componentConfigGroup = [
   {
     groupId: 'textGroup',
     groupName: '文本显示',
-    conponents: [QuestionTitleConfig, QuestionParagraphConfig]
+    conponents: [QuestionInfoConfig, QuestionTitleConfig, QuestionParagraphConfig]
   },
   {
     groupId: 'inputGroup',

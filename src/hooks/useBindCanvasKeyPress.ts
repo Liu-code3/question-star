@@ -36,6 +36,7 @@ function useBindCanvasKeyPress() {
 
   // 粘贴组件
   useKeyPress(['ctrl.v', 'meta.v'], () => {
+    // TODO 在右侧面板输入框中使用cv的时候 会触发这个事件
     if (!isActiveElementValid)
       return
     dispatch(pasteComponent())
