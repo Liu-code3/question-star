@@ -29,5 +29,5 @@ function insertNewComponent(draft: IComponentsState, newComponent: IComponentInf
 
 export {
   getNextSelectedId,
-    insertNewComponent
+  insertNewComponent
 }

@@ -1,11 +1,11 @@
 import type { FC } from 'react'
 import { Typography } from 'antd'
 import { useDispatch } from 'react-redux'
+import { nanoid } from 'nanoid'
 import styles from './ComponentLib.module.scss'
 import type { IComponentConfig } from '@/components/QuestionComponent'
 import { componentConfigGroup } from '@/components/QuestionComponent'
 import { addComponent } from '@/store/componentsReducer'
-import { nanoid } from "nanoid";
 
 const { Title } = Typography
 
