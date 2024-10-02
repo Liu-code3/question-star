@@ -1,57 +1,61 @@
 import type { FC } from 'react'
-import { useEffect } from 'react'
-import { Button, Checkbox, Form, Input, Select, Space } from 'antd'
+import { Button, Checkbox, Form, Input, Space } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { nanoid } from 'nanoid'
-import type { IOptions, IQuestionRadioProps } from './type'
+import type { IOptions, IQuestionCheckboxProps } from './type'
 
-const PropComponent: FC<IQuestionRadioProps> = (props) => {
+const PropComponent: FC<IQuestionCheckboxProps> = (props) => {
   const {
     title,
     isVertical,
-    value,
-    options,
+    list,
     onChange,
     disabled
   } = props
-
   const [form] = Form.useForm()
-  useEffect(() => {
-    form.setFieldsValue({ title, isVertical, value, options })
-  }, [title, isVertical, value, options])
 
   function handleValuesChange() {
     if (!onChange)
       return
+
     onChange(form.getFieldsValue())
   }
 
   return (
     <Form
       layout="vertical"
-      initialValues={{ title, isVertical, value, options }}
+      initialValues={{ title, isVertical, list }}
       form={form}
       disabled={disabled}
       onValuesChange={handleValuesChange}
     >
-      <Form.Item label="标题" name="title" rules={[{ required: true, message: '请输入标题' }]}>
+      <Form.Item
+        label="标题"
+        name="title"
+        rules={[{ required: true, message: '请输入标题' }]}
+      >
         <Input />
       </Form.Item>
       <Form.Item label="选项">
-        <Form.List name="options">
+        <Form.List name="list">
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name }, index) => {
                 return (
                   <Space key={key} align="baseline">
-                    {/*  当前选项 输入框 */}
+                    <Form.Item
+                      name={[name, 'checked']}
+                      valuePropName="checked"
+                    >
+                      <Checkbox />
+                    </Form.Item>
                     <Form.Item
                       name={[name, 'label']}
                       rules={[
-                        { required: true, message: '请输入选项文字' },
+                        { required: true, message: '请输入选项' },
                         ({ getFieldValue }) => ({
                           validator(_, value: string) {
-                            const allValues: string[] = getFieldValue('options').map((item: IOptions) => item.label)
+                            const allValues: string[] = getFieldValue('list').map((item: IOptions) => item.label)
                             if (allValues.filter(v => v === value).length > 1) {
                               return Promise.reject(new Error('选项文字不能重复'))
                             }
@@ -60,18 +64,17 @@ const PropComponent: FC<IQuestionRadioProps> = (props) => {
                         }),
                       ]}
                     >
-                      <Input placeholder="输入选项文字..." />
+                      <Input placeholder="请输入选项文字..." />
                     </Form.Item>
-                    {/*    当前选项 删除按钮 */}
-                    {index > 1 && <MinusCircleOutlined onClick={() => remove(name)} />}
+                    {index > 0 && <MinusCircleOutlined onClick={() => remove(name)} />}
                   </Space>
                 )
               })}
               <Form.Item>
                 <Button
                   type="link"
-                  block={true}
                   onClick={() => add({ label: '', value: nanoid(5) })}
+                  block={true}
                   icon={<PlusOutlined />}
                 >
                   添加选项
@@ -80,13 +83,6 @@ const PropComponent: FC<IQuestionRadioProps> = (props) => {
             </>
           )}
         </Form.List>
-      </Form.Item>
-      <Form.Item label="默认选中" name="value">
-        <Select
-          value={value}
-          options={options?.map(({ label, value }) => ({ label, value }))}
-          allowClear
-        />
       </Form.Item>
       <Form.Item name="isVertical" valuePropName="checked">
         <Checkbox>竖向排列</Checkbox>

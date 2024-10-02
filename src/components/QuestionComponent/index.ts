@@ -5,12 +5,14 @@ import type { IQuestionParagraphProps } from './QuestionParagraph'
 import type { IQuestionInfoProps } from './QuestionInfo'
 import type { IQuestionTextareaProps } from './QuestionTextarea'
 import type { IQuestionRadioProps } from './QuestionRadio'
+import type { IQuestionCheckboxProps } from './QuestionCheckbox'
 import QuestionTitleConfig from './QuestionTitle'
 import QuestionInputConfig from './QuestionInput'
 import QuestionParagraphConfig from './QuestionParagraph'
 import QuestionInfoConfig from './QuestionInfo'
 import QuestionTextareaConfig from './QuestionTextarea'
 import QuestionRadioConfig from './QuestionRadio'
+import QuestionCheckboxConfig from './QuestionCheckbox'
 
 // 各个组件的 prop  type
 type ComponentPropsType = IQuestionInputProps
@@ -19,6 +21,7 @@ type ComponentPropsType = IQuestionInputProps
   & IQuestionInfoProps
   & IQuestionTextareaProps
   & IQuestionRadioProps
+  & IQuestionCheckboxProps
 
 // 组件的配置
 interface IComponentConfig {
@@ -36,7 +39,8 @@ const componentConfigList: IComponentConfig[] = [
   QuestionParagraphConfig,
   QuestionInfoConfig,
   QuestionTextareaConfig,
-  QuestionRadioConfig
+  QuestionRadioConfig,
+  QuestionCheckboxConfig
 ]
 
 // 组件分组
@@ -54,7 +58,7 @@ const componentConfigGroup = [
   {
     groupId: 'chooseGroup',
     groupName: '用户选择',
-    conponents: [QuestionRadioConfig]
+    conponents: [QuestionRadioConfig, QuestionCheckboxConfig]
   }
 ]
 
