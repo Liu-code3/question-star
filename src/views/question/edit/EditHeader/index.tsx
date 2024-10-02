@@ -1,9 +1,52 @@
-import type { FC } from 'react'
-import { Button, Space } from 'antd'
-import { CheckOutlined, LeftOutlined } from '@ant-design/icons'
+import type { ChangeEvent, FC } from 'react'
+import { useState } from 'react'
+import { Button, Input, Space, Typography } from 'antd'
+import { CheckOutlined, EditOutlined, LeftOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import styles from './index.module.scss'
 import EditToolbar from './EditToolbar'
+import { useGetPageInfo } from '@/hooks/useGetPageInfo.ts'
+import { changePageTitle } from '@/store/pageInfoReducer.ts'
+
+const { Title } = Typography
+const TitleElem: FC = () => {
+  const { title } = useGetPageInfo()
+  const dispatch = useDispatch()
+
+  const [editState, setEditState] = useState(false)
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const newTitle = event.target.value.trim()
+    if (!newTitle)
+      return
+
+    dispatch(changePageTitle(newTitle))
+  }
+
+  if (editState) {
+    return (
+      <Input
+        value={title}
+        onChange={handleChange}
+        onPressEnter={() => setEditState(false)}
+        onBlur={() => setEditState(false)}
+      />
+    )
+  }
+
+  return (
+    <Space>
+      <Title>{title}</Title>
+      <Button
+        icon={<EditOutlined />}
+        type="text"
+        onClick={() => setEditState(true)}
+      >
+      </Button>
+    </Space>
+  )
+}
 
 const EditHeader: FC = () => {
   const navigate = useNavigate()
@@ -11,13 +54,16 @@ const EditHeader: FC = () => {
     <div className={styles['header-wrapper']}>
       <div className={styles.header}>
         <div className={styles.left}>
-          <Button
-            type="link"
-            icon={<LeftOutlined />}
-            onClick={() => navigate(-1)}
-          >
-            返回
-          </Button>
+          <Space>
+            <Button
+                type="link"
+                icon={<LeftOutlined />}
+                onClick={() => navigate(-1)}
+            >
+              返回
+            </Button>
+            <TitleElem />
+          </Space>
         </div>
         <div className={styles.main}>
           <EditToolbar />
