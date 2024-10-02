@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { getQuestionItemApi } from '@/api/question.ts'
 import { resetComponents } from '@/store/componentsReducer'
+import { resetPageInfo } from '@/store/pageInfoReducer.ts'
 
 export function useLoadQuestionData() {
   const { id = '' } = useParams()
@@ -26,10 +27,15 @@ export function useLoadQuestionData() {
 
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
-    const { componentList = [] } = data?.data || {}
+    const { title = '', desc = '', js = '', css = '', componentList = [] } = data?.data || {}
     const selectedId = componentList.length > 0 ? componentList[0]?.fe_id : '' // 默认选中第一个组件
 
+    // 把 componentList 存储到  Redux store中
     dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }))
+
+    // 把 pageInfo 存储到 redux store
+    dispatch(resetPageInfo({ title, desc, js, css }))
+
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
   }, [data?.data])

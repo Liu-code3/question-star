@@ -1,11 +1,12 @@
-import {FC, useEffect, useState} from 'react'
+import type { FC } from 'react'
+import { useEffect, useState } from 'react'
 import { FileTextOutlined, SettingOutlined } from '@ant-design/icons'
 import { Tabs } from 'antd'
 import ComponentProp from '@/views/question/edit/RightPanel/ComponentProp.tsx'
-import Setting from '@/views/question/edit/RightPanel/Setting.tsx'
+import PageSetting from '@/views/question/edit/RightPanel/PageSetting.tsx'
 import { useGetComponentInfo } from '@/hooks/useGetComponentInfo.ts'
 
-enum TAB_KEYS  {
+enum TAB_KEYS {
   PROP_KEY = 'prop',
   SETTING_KEY = 'setting'
 }
@@ -17,7 +18,7 @@ const RightPanel: FC = () => {
   useEffect(() => {
     const key = selectedId ? TAB_KEYS.PROP_KEY : TAB_KEYS.SETTING_KEY
     setActiveKey(key)
-  }, [selectedId]);
+  }, [selectedId])
 
   const tabItems = [
     {
@@ -30,7 +31,7 @@ const RightPanel: FC = () => {
       key: TAB_KEYS.SETTING_KEY,
       label: '页面设置',
       icon: <SettingOutlined />,
-      children: <Setting />
+      children: <PageSetting />
     }
   ]
 

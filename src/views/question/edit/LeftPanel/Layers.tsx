@@ -58,7 +58,7 @@ const Layers: FC = () => {
   }
 
   return (
-    <>
+    <div className="px-4">
       {componentList.map((c) => {
         const { fe_id, title, isHidden = false, isLocked = false } = c
 
@@ -105,7 +105,7 @@ const Layers: FC = () => {
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
 
