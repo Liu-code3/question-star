@@ -4,7 +4,7 @@ import { Button, Input, Space, Typography } from 'antd'
 import { CheckOutlined, EditOutlined, LeftOutlined } from '@ant-design/icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { useKeyPress, useRequest } from 'ahooks'
+import { useDebounceEffect, useKeyPress, useRequest } from 'ahooks'
 import styles from './index.module.scss'
 import EditToolbar from './EditToolbar'
 import { useGetPageInfo } from '@/hooks/useGetPageInfo.ts'
@@ -74,6 +74,13 @@ const SaveButton: FC = () => {
     if (!loading)
       save()
   })
+
+  // 自动保存 (不是定期保存 不是定时器)
+  useDebounceEffect(
+    () => save(),
+    [componentList, pageInfo],
+    { wait: 3000 }
+  )
 
   return (
     <Button
