@@ -2,12 +2,15 @@ import type { ChangeEvent, FC } from 'react'
 import { useState } from 'react'
 import { Button, Input, Space, Typography } from 'antd'
 import { CheckOutlined, EditOutlined, LeftOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { useKeyPress, useRequest } from 'ahooks'
 import styles from './index.module.scss'
 import EditToolbar from './EditToolbar'
 import { useGetPageInfo } from '@/hooks/useGetPageInfo.ts'
 import { changePageTitle } from '@/store/pageInfoReducer.ts'
+import { useGetComponentInfo } from '@/hooks/useGetComponentInfo.ts'
+import { updateQuestionItemApi } from '@/api/question.ts'
 
 const { Title } = Typography
 const TitleElem: FC = () => {
@@ -48,6 +51,41 @@ const TitleElem: FC = () => {
   )
 }
 
+const SaveButton: FC = () => {
+  const { id } = useParams()
+  const { componentList = [] } = useGetComponentInfo()
+  const pageInfo = useGetPageInfo()
+  const { loading, run: save } = useRequest(
+    async () => {
+      if (!id)
+        return
+
+      await updateQuestionItemApi(id, { ...componentList, ...pageInfo })
+    },
+    {
+      manual: true
+    }
+  )
+
+  // 快捷键保存
+  useKeyPress(['ctrl.s', 'meta.s'], (event) => {
+    // 阻止网页保存
+    event.preventDefault()
+    if (!loading)
+      save()
+  })
+
+  return (
+    <Button
+      icon={<CheckOutlined />}
+      loading={loading}
+      onClick={save}
+    >
+      保存
+    </Button>
+  )
+}
+
 const EditHeader: FC = () => {
   const navigate = useNavigate()
   return (
@@ -56,9 +94,9 @@ const EditHeader: FC = () => {
         <div className={styles.left}>
           <Space>
             <Button
-                type="link"
-                icon={<LeftOutlined />}
-                onClick={() => navigate(-1)}
+              type="link"
+              icon={<LeftOutlined />}
+              onClick={() => navigate(-1)}
             >
               返回
             </Button>
@@ -70,7 +108,7 @@ const EditHeader: FC = () => {
         </div>
         <div className={styles.right}>
           <Space>
-            <Button icon={<CheckOutlined />}>保存</Button>
+            <SaveButton />
             <Button type="primary">发布</Button>
           </Space>
         </div>
