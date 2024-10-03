@@ -1,6 +1,6 @@
 import type { ChangeEvent, FC } from 'react'
 import { useState } from 'react'
-import { Button, Input, Space, Typography } from 'antd'
+import { Button, Input, Space, Typography, message } from 'antd'
 import { CheckOutlined, EditOutlined, LeftOutlined } from '@ant-design/icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -60,7 +60,7 @@ const SaveButton: FC = () => {
       if (!id)
         return
 
-      await updateQuestionItemApi(id, { ...componentList, ...pageInfo })
+      await updateQuestionItemApi(id, { componentList, ...pageInfo })
     },
     {
       manual: true
@@ -93,6 +93,45 @@ const SaveButton: FC = () => {
   )
 }
 
+// 发布按钮
+// 删除，假删除 isDelete=true（更新）
+// 发布，isPublish=true（更新）
+const PublishButton: FC = () => {
+  const { id } = useParams()
+  const naviagte = useNavigate()
+  const { componentList = [] } = useGetComponentInfo()
+  const pageInfo = useGetPageInfo()
+  const { loading, run: pub } = useRequest(
+    async () => {
+      if (!id)
+        return
+
+      await updateQuestionItemApi(id, {
+        componentList,
+        ...pageInfo,
+        isPublished: true // 标示该问卷已经被发布
+      })
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success('发布成功')
+        naviagte(`/question/stat/${id}`) // 发布成功，跳转到统计页面
+      }
+    }
+  )
+
+  return (
+    <Button
+      type="primary"
+      loading={loading}
+      onClick={pub}
+    >
+      发布
+    </Button>
+  )
+}
+
 const EditHeader: FC = () => {
   const navigate = useNavigate()
   return (
@@ -116,7 +155,7 @@ const EditHeader: FC = () => {
         <div className={styles.right}>
           <Space>
             <SaveButton />
-            <Button type="primary">发布</Button>
+            <PublishButton />
           </Space>
         </div>
       </div>
