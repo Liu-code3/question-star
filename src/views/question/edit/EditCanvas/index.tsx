@@ -5,8 +5,11 @@ import classnames from 'classnames'
 import styles from './index.module.scss'
 import { useGetComponentInfo } from '@/hooks/useGetComponentInfo.ts'
 import type { IComponentInfo } from '@/store/componentsReducer'
-import { changeSelectedId } from '@/store/componentsReducer'
+import { changeSelectedId, moveComponent } from '@/store/componentsReducer'
+
 import { getComponentConfigByType } from '@/components/QuestionComponent'
+import SortableContainer from '@/components/DragSortable/SortableContainer.tsx'
+import SortableItem from '@/components/DragSortable/SortableItem.tsx'
 
 function GenComponent(component: IComponentInfo) {
   const { type, props } = component
@@ -29,6 +32,12 @@ const EditCanvas: FC<IEditCanvasProps> = ({ loading }) => {
   }
 
   const { componentList, selectedId } = useGetComponentInfo()
+
+  function handleDragEnd(oldIndex: number, newIndex: number) {
+    dispatch(moveComponent({ oldIndex, newIndex }))
+  }
+
+  const componentListWithId = componentList.map(c => ({ ...c, id: c.fe_id }))
   if (loading) {
     return (
       <div className="mt-6 text-center">
@@ -36,30 +45,34 @@ const EditCanvas: FC<IEditCanvasProps> = ({ loading }) => {
       </div>
     )
   }
+
   return (
     // 这里html分层 需要借鉴 单一组件原则
     <div className={styles.canvas}>
-      {componentList
-        .filter(c => !c.isHidden)
-        .map((c) => {
-          const wrapperClassName = classnames({
-            [styles['component-wrapper']]: true,
-            [styles.selected]: c.fe_id === selectedId,
-            [styles.locked]: c.isLocked
-          })
+      <SortableContainer items={componentListWithId} onDragEnd={handleDragEnd}>
+        {componentList
+          .filter(c => !c.isHidden)
+          .map((c) => {
+            const wrapperClassName = classnames({
+              [styles['component-wrapper']]: true,
+              [styles.selected]: c.fe_id === selectedId,
+              [styles.locked]: c.isLocked
+            })
 
-          return (
-            <div
-              key={c.fe_id}
-              className={wrapperClassName}
-              onClick={e => handleClick(e, c.fe_id)}
-            >
-              <div className={styles.component}>
-                {GenComponent(c)}
-              </div>
-            </div>
-          )
-        })}
+            return (
+              <SortableItem key={c.fe_id} id={c.fe_id}>
+                <div
+                  className={wrapperClassName}
+                  onClick={e => handleClick(e, c.fe_id)}
+                >
+                  <div className={styles.component}>
+                    {GenComponent(c)}
+                  </div>
+                </div>
+              </SortableItem>
+            )
+          })}
+      </SortableContainer>
     </div>
   )
 }

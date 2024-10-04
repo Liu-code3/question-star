@@ -2,6 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import { produce } from 'immer'
 import { nanoid } from 'nanoid'
+import { arrayMove } from '@dnd-kit/sortable'
 import { getNextSelectedId, insertNewComponent } from './utils.ts'
 import type { ComponentPropsType } from '@/components/QuestionComponent'
 import { deepMerge } from '@/utils/cloneDeep.ts'
@@ -153,12 +154,20 @@ const componentSlice = createSlice({
 
     // 修改组件标题
     changeComponentTitle: produce(
-      (draft: IComponentsState, action: PayloadAction<{ fe_id: string; title: string }>) => {
+      (draft: IComponentsState, action: PayloadAction<{ fe_id: string, title: string }>) => {
         const { componentList } = draft
         const { fe_id, title } = action.payload
         const curComp = componentList.find(c => c.fe_id === fe_id)
         if (curComp)
           curComp.title = title
+      }
+    ),
+    // 移动组件
+    moveComponent: produce(
+      (draft: IComponentsState, action: PayloadAction<{ oldIndex: number, newIndex: number }>) => {
+        const { componentList: curComponentList } = draft
+        const { oldIndex, newIndex } = action.payload
+        draft.componentList = arrayMove(curComponentList, oldIndex, newIndex)
       }
     )
   }
@@ -176,7 +185,8 @@ export const {
   pasteComponent,
   selectPrevComponent,
   selectNextComponent,
-  changeComponentTitle
+  changeComponentTitle,
+  moveComponent
 } = componentSlice.actions
 export default componentSlice.reducer
 
