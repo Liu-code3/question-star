@@ -14,7 +14,8 @@ import {
 function isActiveElementValid() {
   const activeElem = document.activeElement
 
-  return activeElem === document.body
+  // 'div[role="button"]' 是 @dnd-kit包装的组件
+  return activeElem === document.body || activeElem?.matches('div[role="button"]');
 }
 
 function useBindCanvasKeyPress() {
