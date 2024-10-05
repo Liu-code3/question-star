@@ -1,6 +1,5 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { produce } from 'immer'
 import { nanoid } from 'nanoid'
 import { arrayMove } from '@dnd-kit/sortable'
 import { getNextSelectedId, insertNewComponent } from './utils.ts'
@@ -37,139 +36,115 @@ const componentSlice = createSlice({
       return action.payload
     },
     // 修改 selectedId
-    changeSelectedId: produce(
-      (draft: IComponentsState, action: PayloadAction<string>) => {
-        draft.selectedId = action.payload
-      }
-    ),
+    changeSelectedId: (state: IComponentsState, action: PayloadAction<string>) => {
+        state.selectedId = action.payload
+    },
     // 添加新组件
-    addComponent: produce(
-      (draft: IComponentsState, action: PayloadAction<IComponentInfo>) => {
+    addComponent: (state: IComponentsState, action: PayloadAction<IComponentInfo>) => {
         const newComponent = action.payload
-        insertNewComponent(draft, newComponent)
-      }
-    ),
+        insertNewComponent(state, newComponent)
+    },
     // 修改组件信息
-    changeComponentProps: produce(
-      (draft: IComponentsState, action: PayloadAction<{ fe_id: string, newProps: Partial<ComponentPropsType> }>) => {
+    changeComponentProps: (state: IComponentsState, action: PayloadAction<{ fe_id: string, newProps: Partial<ComponentPropsType> }>) => {
         const { fe_id, newProps } = action.payload
         // 当前需要修改属性的这个组件
-        const curComp = draft.componentList.find(c => c.fe_id === fe_id)
+        const curComp = state.componentList.find(c => c.fe_id === fe_id)
         if (curComp) {
-          curComp.props = {
-            ...curComp.props,
-            ...newProps
-          }
+            curComp.props = {
+                ...curComp.props,
+                ...newProps
+            }
         }
-      }
-    ),
+    },
     // 删除组件
-    removeSelectedComponent: produce(
-      (draft: IComponentsState) => {
-        const { componentList, selectedId } = draft
+    removeSelectedComponent: (state: IComponentsState) => {
+        const { componentList, selectedId } = state
 
         // 重新计算  selectedId
-        draft.selectedId = getNextSelectedId(selectedId, componentList)
+        state.selectedId = getNextSelectedId(selectedId, componentList)
 
         const delIndex = componentList.findIndex(c => c.fe_id === selectedId)
         if (delIndex < 0)
-          return
+            return
         componentList.splice(delIndex, 1)
-      }
-    ),
+    },
     // 隐藏/显示 组件
-    changeComponentHidden: produce(
-      (draft: IComponentsState, action: PayloadAction<{ fe_id: string, isHidden: boolean }>) => {
-        const { componentList = [] } = draft
+    changeComponentHidden: (state: IComponentsState, action: PayloadAction<{ fe_id: string, isHidden: boolean }>) => {
+        const { componentList = [] } = state
         const { fe_id, isHidden } = action.payload
         // 重新计算  selectId
-        draft.selectedId = isHidden ? getNextSelectedId(fe_id, componentList) : fe_id
+        state.selectedId = isHidden ? getNextSelectedId(fe_id, componentList) : fe_id
 
-        const curComp = draft.componentList.find(c => c.fe_id === fe_id)
+        const curComp = state.componentList.find(c => c.fe_id === fe_id)
         if (curComp)
-          curComp.isHidden = isHidden
-      }
-    ),
+            curComp.isHidden = isHidden
+    },
     // 锁定/解锁 组件
-    changeComponentLocked: produce(
-      (draft: IComponentsState, action: PayloadAction<{ fe_id: string }>) => {
+    changeComponentLocked: (state: IComponentsState, action: PayloadAction<{ fe_id: string }>) => {
         const { fe_id } = action.payload
-        const curComp = draft.componentList.find(c => c.fe_id === fe_id)
+        const curComp = state.componentList.find(c => c.fe_id === fe_id)
         if (curComp) {
-          curComp.isLocked = !curComp.isLocked
+            curComp.isLocked = !curComp.isLocked
         }
-      }
-    ),
+    },
     // 复制组件
-    copyComponent: produce(
-      (draft: IComponentsState) => {
-        const { selectedId, componentList } = draft
+    copyComponent: (state: IComponentsState) => {
+        const { selectedId, componentList } = state
         const selectedComponent = componentList.find(c => c.fe_id === selectedId)
         if (!selectedComponent)
-          return
+            return
 
-        draft.copiedComponent = deepMerge(selectedComponent)
-      }
-    ),
+        state.copiedComponent = deepMerge(selectedComponent)
+    },
     // 粘贴组件
-    pasteComponent: produce(
-      (draft: IComponentsState) => {
-        const { copiedComponent } = draft
+    pasteComponent: (state: IComponentsState) => {
+        const { copiedComponent } = state
         if (!copiedComponent)
-          return
+            return
 
         copiedComponent.fe_id = nanoid()
-        insertNewComponent(draft, copiedComponent)
-      }
-    ),
+        insertNewComponent(state, copiedComponent)
+    },
 
     // 选中上一个
-    selectPrevComponent: produce(
-      (draft: IComponentsState) => {
-        const { selectedId, componentList } = draft
+    selectPrevComponent: (state: IComponentsState) => {
+        const { selectedId, componentList } = state
         const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
 
         if (selectedIndex <= 0)
-          return
+            return
 
-        draft.selectedId = componentList[selectedIndex - 1].fe_id
-      }
-    ),
+        state.selectedId = componentList[selectedIndex - 1].fe_id
+    },
 
     // 选中下一个
-    selectNextComponent: produce(
-      (draft: IComponentsState) => {
-        const { selectedId, componentList } = draft
+    selectNextComponent: (state: IComponentsState) => {
+        const { selectedId, componentList } = state
         const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
 
         if (selectedIndex < 0)
-          return
+            return
 
         if (selectedIndex === componentList.length - 1)
-          return
+            return
 
-        draft.selectedId = componentList[selectedIndex + 1].fe_id
-      }
-    ),
+        state.selectedId = componentList[selectedIndex + 1].fe_id
+    },
 
     // 修改组件标题
-    changeComponentTitle: produce(
-      (draft: IComponentsState, action: PayloadAction<{ fe_id: string, title: string }>) => {
-        const { componentList } = draft
+    changeComponentTitle: (state: IComponentsState, action: PayloadAction<{ fe_id: string, title: string }>) => {
+        const { componentList } = state
         const { fe_id, title } = action.payload
         const curComp = componentList.find(c => c.fe_id === fe_id)
         if (curComp)
-          curComp.title = title
-      }
-    ),
+            curComp.title = title
+    },
     // 移动组件
-    moveComponent: produce(
-      (draft: IComponentsState, action: PayloadAction<{ oldIndex: number, newIndex: number }>) => {
-        const { componentList: curComponentList } = draft
+    moveComponent:  (state: IComponentsState, action: PayloadAction<{ oldIndex: number, newIndex: number }>) => {
+        const { componentList: curComponentList } = state
         const { oldIndex, newIndex } = action.payload
-        draft.componentList = arrayMove(curComponentList, oldIndex, newIndex)
-      }
-    )
+        state.componentList = arrayMove(curComponentList, oldIndex, newIndex)
+    }
   }
 })
 
