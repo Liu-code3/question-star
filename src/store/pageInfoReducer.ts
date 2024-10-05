@@ -1,6 +1,5 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { produce } from 'immer'
 
 export interface IPageInfoState {
   title: string
@@ -24,11 +23,9 @@ const pageInfoSlice = createSlice({
       return action.payload
     },
     // 修改问卷标题
-    changePageTitle: produce(
-      (draft: IPageInfoState, action: PayloadAction<string>) => {
-        draft.title = action.payload
-      }
-    )
+    changePageTitle:  (state: IPageInfoState, action: PayloadAction<string>) => {
+      state.title = action.payload
+    }
   }
 })
 
