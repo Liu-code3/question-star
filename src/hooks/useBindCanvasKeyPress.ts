@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { useKeyPress } from 'ahooks'
+import { ActionCreators } from 'redux-undo'
 import {
   copyComponent,
   pasteComponent,
@@ -15,7 +16,7 @@ function isActiveElementValid() {
   const activeElem = document.activeElement
 
   // 'div[role="button"]' 是 @dnd-kit包装的组件
-  return activeElem === document.body || activeElem?.matches('div[role="button"]');
+  return activeElem === document.body || activeElem?.matches('div[role="button"]')
 }
 
 function useBindCanvasKeyPress() {
@@ -55,6 +56,24 @@ function useBindCanvasKeyPress() {
     if (!isActiveElementValid)
       return
     dispatch(selectNextComponent())
+  })
+
+  // 撤销
+  useKeyPress(['ctrl.z', 'meta.z'], () => {
+    if (!isActiveElementValid)
+      return
+    dispatch(ActionCreators.undo())
+  }, {
+    exactMatch: true // 严格匹配 例如 ctrl.shift.z也能触发此hook 所以需要严格匹配
+  })
+
+  // 重做
+  useKeyPress(['ctrl.shift.z', 'meta.shift.z'], () => {
+    if (!isActiveElementValid)
+      return
+    dispatch(ActionCreators.redo())
+  }, {
+    exactMatch: true // 严格匹配
   })
 }
 
