@@ -6,13 +6,15 @@ export interface IPageInfoState {
   desc?: string
   js?: string
   css?: string
+  isPublished?: boolean
 }
 
 const INIT_STATE: IPageInfoState = {
   title: '',
   desc: '',
   js: '',
-  css: ''
+  css: '',
+  isPublished: false
 }
 
 const pageInfoSlice = createSlice({
@@ -23,7 +25,7 @@ const pageInfoSlice = createSlice({
       return action.payload
     },
     // 修改问卷标题
-    changePageTitle:  (state: IPageInfoState, action: PayloadAction<string>) => {
+    changePageTitle: (state: IPageInfoState, action: PayloadAction<string>) => {
       state.title = action.payload
     }
   }

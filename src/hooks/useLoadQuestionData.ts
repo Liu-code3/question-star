@@ -27,14 +27,14 @@ export function useLoadQuestionData() {
 
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
-    const { title = '', desc = '', js = '', css = '', componentList = [] } = data?.data || {}
+    const { title = '', desc = '', js = '', css = '', componentList = [], isPublished = false } = data?.data || {}
     const selectedId = componentList.length > 0 ? componentList[0]?.fe_id : '' // 默认选中第一个组件
 
     // 把 componentList 存储到  Redux store中
     dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }))
 
     // 把 pageInfo 存储到 redux store
-    dispatch(resetPageInfo({ title, desc, js, css }))
+    dispatch(resetPageInfo({ title, desc, js, css, isPublished }))
 
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error

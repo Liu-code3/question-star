@@ -13,12 +13,13 @@
 }
 
 .content {
-  margin: 0 24px;
   display: flex;
+  justify-content: center;
 
   .left {
     width: 350px;
     margin-right: 24px;
+    background-color: #fff;
   }
 
   .main {
