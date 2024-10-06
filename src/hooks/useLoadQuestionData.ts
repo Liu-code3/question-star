@@ -11,14 +11,17 @@ export function useLoadQuestionData() {
   const { id = '' } = useParams()
   const dispatch = useDispatch()
 
-  const { data, loading, error, run } = useRequest(async (id: string) => {
-    if (!id)
-      return message.warning('无法查看问卷')
+  const { data, loading, error, run } = useRequest(
+    async (id: string) => {
+      if (!id)
+        return message.warning('无法查看问卷')
 
-    return await getQuestionItemApi(id)
-  }, {
-    manual: true
-  })
+      return await getQuestionItemApi(id)
+    },
+    {
+      manual: true
+    }
+  )
 
   // 根据获取的data设置 redux store
   useEffect(() => {
