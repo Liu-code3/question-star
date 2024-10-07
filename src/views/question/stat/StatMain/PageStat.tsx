@@ -2,9 +2,11 @@ import type { FC } from 'react'
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { useParams } from 'react-router-dom'
-import { Spin, Table, Typography } from 'antd'
+import { Pagination, Spin, Table, Typography } from 'antd'
 import { getQuestionStatListApi } from '@/api/stat.ts'
 import { useGetComponentInfo } from '@/hooks/useGetComponentInfo.ts'
+import { STAT_PAGE_SIZE } from '@/constant'
+import styles from './PageStat.module.scss'
 
 interface IProps {
   selectedComponentId: string
@@ -24,15 +26,18 @@ const PageStat: FC<IProps> = (props) => {
     setSelectedComponentType
   } = props
   const { id = '' } = useParams()
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(STAT_PAGE_SIZE)
   const [total, setTotal] = useState(0)
   const [list, setList] = useState<ITableList[]>([])
   const { componentList } = useGetComponentInfo()
   const { loading } = useRequest(
     async () => {
-      const res = await getQuestionStatListApi(id, { page: 1, pageSize: 10 })
+      const res = await getQuestionStatListApi(id, { page, pageSize })
       return res
     },
     {
+      refreshDeps: [id, page, pageSize],
       onSuccess(res) {
         const { data } = res || {}
         setTotal(data.total)
@@ -72,11 +77,26 @@ const PageStat: FC<IProps> = (props) => {
 
   const dataSource = list.map(i => ({ ...i, key: i._id }))
   const TableEle = (
-    <Table
-      columns={columns}
-      dataSource={dataSource}
-      pagination={false}
-    />
+    <>
+      <div className={styles.table_list}>
+          <Table
+              columns={columns}
+              dataSource={dataSource}
+              pagination={false}
+          />
+      </div>
+      <div className="layout-center mt-4">
+        <Pagination
+          total={total}
+          current={page}
+          pageSize={pageSize}
+          onChange={(page, pageSize) => {
+            setPage(page)
+            setPageSize(pageSize)
+          }}
+        />
+      </div>
+    </>
   )
 
   if (loading) {
