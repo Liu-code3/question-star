@@ -8,6 +8,7 @@ import StatHeader from './StatHeader/StatHeader'
 import ComponentList from './StatLeft/ComponentList'
 import { useGetPageInfo } from '@/hooks/useGetPageInfo.ts'
 import { useLoadQuestionData } from '@/hooks/useLoadQuestionData.ts'
+import PageStat from '@/views/question/stat/StatMain/PageStat.tsx'
 
 const Stat: FC = () => {
   const navigate = useNavigate()
@@ -52,7 +53,13 @@ const Stat: FC = () => {
             setSelectedComponentType={setSelectedComponentType}
           />
         </div>
-        <div className={styles.main}>中</div>
+        <div className={styles.main}>
+          <PageStat
+            selectedComponentId={selectedComponentId}
+            setSelectedComponentId={setSelectedComponentId}
+            setSelectedComponentType={setSelectedComponentType}
+          />
+        </div>
         <div className={styles.right}>右</div>
       </>
     )
