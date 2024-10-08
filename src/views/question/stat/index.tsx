@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import styles from './index.module.scss'
 import StatHeader from './StatHeader/StatHeader'
 import ComponentList from './StatLeft/ComponentList'
+import ChartStat from './StatRight/ChartStat'
 import { useGetPageInfo } from '@/hooks/useGetPageInfo.ts'
 import { useLoadQuestionData } from '@/hooks/useLoadQuestionData.ts'
 import PageStat from '@/views/question/stat/StatMain/PageStat.tsx'
@@ -60,7 +61,12 @@ const Stat: FC = () => {
             setSelectedComponentType={setSelectedComponentType}
           />
         </div>
-        <div className={styles.right}>右</div>
+        <div className={styles.right}>
+          <ChartStat
+            selectedComponentId={selectedComponentId}
+            selectedComponentType={selectedComponentType}
+          />
+        </div>
       </>
     )
   }

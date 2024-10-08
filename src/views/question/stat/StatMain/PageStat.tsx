@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { useParams } from 'react-router-dom'
 import { Pagination, Spin, Table, Typography } from 'antd'
+import styles from './PageStat.module.scss'
 import { getQuestionStatListApi } from '@/api/stat.ts'
 import { useGetComponentInfo } from '@/hooks/useGetComponentInfo.ts'
 import { STAT_PAGE_SIZE } from '@/constant'
-import styles from './PageStat.module.scss'
 
 interface IProps {
   selectedComponentId: string
@@ -79,11 +79,11 @@ const PageStat: FC<IProps> = (props) => {
   const TableEle = (
     <>
       <div className={styles.table_list}>
-          <Table
-              columns={columns}
-              dataSource={dataSource}
-              pagination={false}
-          />
+        <Table
+          columns={columns}
+          dataSource={dataSource}
+          pagination={false}
+        />
       </div>
       <div className="layout-center mt-4">
         <Pagination

@@ -8,6 +8,11 @@ function getQuestionStatListApi(id: string, params: StatPageType) {
   return requset.get(`/stat/${id}`, { params })
 }
 
+function getComponentStatApi (questionId: string, componentId: string) {
+  return requset.get(`/stat/${questionId}/${componentId}`)
+}
+
 export {
-  getQuestionStatListApi
+  getQuestionStatListApi,
+  getComponentStatApi
 }
