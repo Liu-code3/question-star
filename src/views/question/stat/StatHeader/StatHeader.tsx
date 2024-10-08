@@ -28,7 +28,7 @@ const StatHeader: FC = () => {
     if (!isPublished)
       return null
       // 拼接url，需要参考C端端规则
-    const url = `http://localhost:3000/question/${id}`
+    const url = `http://192.168.10.21:3000/question/${id}`
     // 定义二维码组件
     const QRCodeEle = (
       <div className="text-center">

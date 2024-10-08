@@ -69,7 +69,7 @@ const SaveButton: FC = () => {
 
   // 快捷键保存
   useKeyPress(['ctrl.s', 'meta.s'], (event) => {
-    // 阻止网页保存
+    // 阻止网页自动保存
     event.preventDefault()
     if (!loading)
       save()
