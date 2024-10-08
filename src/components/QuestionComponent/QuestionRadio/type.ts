@@ -13,6 +13,10 @@ interface IQuestionRadioProps {
   disabled?: boolean
 }
 
+interface IQuestionRadioStatProps {
+  stat: Array<{name: string; count: number}>
+}
+
 const QuestionRadioDefaultProps: IQuestionRadioProps = {
   title: '单选标题',
   isVertical: false,
@@ -24,5 +28,5 @@ const QuestionRadioDefaultProps: IQuestionRadioProps = {
   value: ''
 }
 
-export type { IQuestionRadioProps, IOptions }
+export type { IQuestionRadioProps, IOptions, IQuestionRadioStatProps }
 export { QuestionRadioDefaultProps }

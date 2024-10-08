@@ -13,6 +13,10 @@ interface IQuestionCheckboxProps {
   disabled?: boolean
 }
 
+interface IQuestionCheckboxStatProps {
+  stat: Array<{name: string; count: number}>
+}
+
 const QuestionCheckboxDefaultProps: IQuestionCheckboxProps = {
   title: '多选标题',
   isVertical: false,
@@ -23,5 +27,5 @@ const QuestionCheckboxDefaultProps: IQuestionCheckboxProps = {
   ]
 }
 
-export type { IOptions, IQuestionCheckboxProps }
+export type { IOptions, IQuestionCheckboxProps, IQuestionCheckboxStatProps }
 export { QuestionCheckboxDefaultProps }

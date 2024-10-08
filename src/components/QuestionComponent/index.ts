@@ -4,8 +4,8 @@ import type { IQuestionTitleProps } from './QuestionTitle'
 import type { IQuestionParagraphProps } from './QuestionParagraph'
 import type { IQuestionInfoProps } from './QuestionInfo'
 import type { IQuestionTextareaProps } from './QuestionTextarea'
-import type { IQuestionRadioProps } from './QuestionRadio'
-import type { IQuestionCheckboxProps } from './QuestionCheckbox'
+import type { IQuestionRadioProps, IQuestionRadioStatProps } from './QuestionRadio'
+import type { IQuestionCheckboxProps, IQuestionCheckboxStatProps } from './QuestionCheckbox'
 import QuestionTitleConfig from './QuestionTitle'
 import QuestionInputConfig from './QuestionInput'
 import QuestionParagraphConfig from './QuestionParagraph'
@@ -14,7 +14,7 @@ import QuestionTextareaConfig from './QuestionTextarea'
 import QuestionRadioConfig from './QuestionRadio'
 import QuestionCheckboxConfig from './QuestionCheckbox'
 
-// 各个组件的 prop  type
+// 统一, 各个组件的prop type
 type ComponentPropsType = IQuestionInputProps
   & IQuestionTitleProps
   & IQuestionParagraphProps
@@ -23,13 +23,17 @@ type ComponentPropsType = IQuestionInputProps
   & IQuestionRadioProps
   & IQuestionCheckboxProps
 
-// 组件的配置
+// 统一, 各个组件统计的props type
+type ComponentStatPropsType = IQuestionRadioStatProps & IQuestionCheckboxStatProps
+
+// 统一，组件的配置
 interface IComponentConfig {
   title: string
   type: string
   Component: FC<ComponentPropsType> // 画布所需要的组件
   PropComponent: FC<ComponentPropsType> // 右侧面板所需要的属性组件
-  defaultProps: ComponentPropsType
+  defaultProps: ComponentPropsType,
+  StatComponent?: FC<ComponentStatPropsType>
 }
 
 //  全部组件配置的列表
