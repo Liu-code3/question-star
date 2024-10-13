@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import type { InputRef } from 'antd'
 import { Button, Input, Popover, QRCode, Space, Tooltip, Typography, message } from 'antd'
 import { CopyOutlined, LeftOutlined, QrcodeOutlined } from '@ant-design/icons'
@@ -24,10 +24,36 @@ const StatHeader: FC = () => {
     message.success('拷贝成功')
   }
 
-  function genLinkAndQRCodeEle() {
+  // function genLinkAndQRCodeEle() {
+  //   if (!isPublished)
+  //     return null
+  //     // 拼接url，需要参考C端端规则
+  //   const url = `http://192.168.10.21:3000/question/${id}`
+  //   // 定义二维码组件
+  //   const QRCodeEle = (
+  //     <div className="text-center">
+  //       <QRCode value={url} size={150}></QRCode>
+  //     </div>
+  //   )
+  //
+  //   return (
+  //     <Space>
+  //       <Input value={url} style={{ width: '300px' }} ref={urlInputRef} />
+  //       <Tooltip title="拷贝链接">
+  //         <Button icon={<CopyOutlined />} onClick={copy}></Button>
+  //       </Tooltip>
+  //       <Popover content={QRCodeEle}>
+  //         <Button icon={<QrcodeOutlined />}></Button>
+  //       </Popover>
+  //     </Space>
+  //   )
+  // }
+
+  // 使用 useMemo 1.依赖项是否经常变化; 2.缓存的元素是否创建成本较高
+  const LinkAndQRCodeEle = useMemo(() => {
     if (!isPublished)
       return null
-      // 拼接url，需要参考C端端规则
+    // 拼接url，需要参考C端端规则
     const url = `http://192.168.10.21:3000/question/${id}`
     // 定义二维码组件
     const QRCodeEle = (
@@ -47,7 +73,7 @@ const StatHeader: FC = () => {
         </Popover>
       </Space>
     )
-  }
+  }, [id, isPublished])
 
   return (
     <div className={styles['header-wrapper']}>
@@ -60,7 +86,7 @@ const StatHeader: FC = () => {
             <Title>{title}</Title>
           </Space>
         </div>
-        <div className={styles.main}>{genLinkAndQRCodeEle()}</div>
+        <div className={styles.main}>{LinkAndQRCodeEle}</div>
         <div className={styles.right}>
           <Button type="primary" onClick={() => navigate(`/question/edit/${id}`)}>
             编辑问卷
