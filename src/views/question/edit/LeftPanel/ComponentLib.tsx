@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { useCallback } from 'react'
 import { Typography } from 'antd'
 import { useDispatch } from 'react-redux'
 import { nanoid } from 'nanoid'
@@ -13,14 +14,14 @@ function GenComponent(c: IComponentConfig) {
   const { type, title, Component, defaultProps } = c
   const dispatch = useDispatch()
 
-  function handleClick() {
+  const handleClick = useCallback(() => {
     dispatch(addComponent({
       fe_id: nanoid(),
       type,
       title,
       props: defaultProps
     }))
-  }
+  }, [])
 
   return (
     <div key={type} className={styles.wrapper} onClick={handleClick}>
