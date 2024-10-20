@@ -16,4 +16,4 @@ export function createAxios(options = {}) {
   return service
 }
 
-export const requset = createAxios()
+export const request = createAxios()

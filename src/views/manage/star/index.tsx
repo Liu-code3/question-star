@@ -13,7 +13,7 @@ const { Title } = Typography
 const Star: FC = () => {
   useTitle('小星问卷 - 星标问卷')
 
-  const { data, loading } = useLoadQuestionListData({ isStar: true })
+  const { data, loading, refresh } = useLoadQuestionListData({ isStar: true })
   const { list = [], total = 0 } = data?.data || {}
   return (
     <>
@@ -33,7 +33,7 @@ const Star: FC = () => {
           list.length > 0
           && list.map((q: PropsType) => {
             const { _id } = q
-            return <QuestionCard key={_id} {...q} />
+            return <QuestionCard key={_id} {...q} onUpdateSuccess={refresh} />
           })
         }
       </div>

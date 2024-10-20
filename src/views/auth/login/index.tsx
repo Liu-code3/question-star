@@ -56,7 +56,7 @@ const Login: FC = () => {
     {
       manual: true,
       onSuccess(result) {
-        localCache.setCache(requestConfig.TOKEN_NAME, result.data)
+        localCache.setCache(requestConfig.TOKEN_NAME, result.data.token)
         message.success('登录成功')
         navigate(MANAGE_INDEX_PATHNAME)
       }
@@ -94,11 +94,11 @@ const Login: FC = () => {
               { required: true, message: '请输入用户名' },
               {
                 type: 'string',
-                min: 5,
+                min: 2,
                 max: 20,
-                message: '字符长度在5 - 20 之间'
+                message: '字符长度在2 - 20 之间'
               },
-              { pattern: /^\w+$/, message: '只能是字母数字下划线' }
+              // { pattern: /^\w+$/, message: '只能是字母数字下划线' }
             ]}
           >
             <Input />

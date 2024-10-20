@@ -1,26 +1,27 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useGetUserInfo } from '@/hooks/useGetUserInfo.ts'
-import { LOGIN_PATHNAME, MANAGE_INDEX_PATHNAME, isLoginOrRegister, isNoNeedUserInfo } from '@/router/constant.ts'
+import { LOGIN_PATHNAME, MANAGE_INDEX_PATHNAME, isLoginOrRegister } from '@/router/constant.ts'
+import { localCache } from '@/utils/cache.ts'
+import { requestConfig } from '@/utils/http/config.ts'
 
 export function useNavPage(waitingUserData: boolean) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { username } = useGetUserInfo()
+  const token = localCache.getCache(requestConfig.TOKEN_NAME)
 
   useEffect(() => {
     if (waitingUserData)
       return
 
-    if (username) {
+    if (token) {
       if (isLoginOrRegister(pathname)) {
         navigate(MANAGE_INDEX_PATHNAME)
       }
       return
     }
 
-    if (!isNoNeedUserInfo(pathname)) {
+    if (!isLoginOrRegister(pathname)) {
       navigate(LOGIN_PATHNAME)
     }
-  }, [pathname, username, waitingUserData])
+  }, [token, pathname, waitingUserData])
 }

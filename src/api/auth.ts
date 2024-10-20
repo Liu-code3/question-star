@@ -1,18 +1,19 @@
-import { requset } from '@/utils/http/index.js'
+import { request } from '@/utils/http/index.js'
+import { noCredential } from '@/utils/http/config.ts'
 
 /** 获取用户信息 */
 function getUserInfoApi() {
-  return requset.get('/user/info')
+  return request.get('/user/info')
 }
 
 /** 注册 */
 function registerApi<T>(data: T) {
-  return requset.post('/user/register', data)
+  return request.post('/user/register', data, noCredential)
 }
 
 /** 登录 */
 function loginApi<T>(data: T) {
-  return requset.post('/user/login', data)
+  return request.post('/user/login', data, noCredential)
 }
 
 export {

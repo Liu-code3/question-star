@@ -4,14 +4,19 @@ import { message } from 'antd'
 // 以下这些code需要重新登录
 const reloadCodes: number[] = [401, 1011007, 1011008]
 
+// 跨域请求时是否需要使用凭证
+const noCredential = {
+  withCredentials: false
+}
+
 // 以下code是代表成功
-const successCodes: string[] = ['3001', '200']
+const successCodes: number[] = [200]
 
 const requestConfig = {
   // TokenName // Authorization
-  TOKEN_NAME: 'token',
+  TOKEN_NAME: 'Authorization',
   // Token前缀，注意最后有个空格，如不需要需设置空字符串 // Bearer
-  TOKEN_PREFIX: '',
+  TOKEN_PREFIX: 'Bearer ',
   // 请求是否开启缓存
   REQUEST_CACHE: true,
   // 追加其他头
@@ -42,4 +47,5 @@ export {
   reloadCodes,
   successCodes,
   handlerError,
+  noCredential
 }

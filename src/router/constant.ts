@@ -9,7 +9,3 @@ export const MANAGE_TRASH_PATHNAME = '/manage/trash'
 export function isLoginOrRegister(pathname: string) {
   return [LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)
 }
-// 判断是否需要用户信息
-export function isNoNeedUserInfo(pathname: string) {
-  return [HOME_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)
-}

@@ -23,10 +23,11 @@ export interface PropsType {
   isPublished: boolean
   answerCount: number
   createdAt: string
+  onUpdateSuccess?: () => void
 }
 const QuestionCard: FC<PropsType> = (props) => {
   const navigate = useNavigate()
-  const { _id, title, createdAt, answerCount, isPublished, isStar } = props
+  const { _id, title, createdAt, answerCount, isPublished, isStar, onUpdateSuccess } = props
 
   /** 处理星标 */
   const isStarState = useRef(isStar)
@@ -35,7 +36,10 @@ const QuestionCard: FC<PropsType> = (props) => {
     isStarState.current = !isStarState.current
     return res
   }, {
-    manual: true
+    manual: true,
+    onSuccess() {
+      onUpdateSuccess?.()
+    }
   })
 
   /** 处理复制 */
@@ -81,7 +85,7 @@ const QuestionCard: FC<PropsType> = (props) => {
             to={isPublished ? `/question/stat/${_id}` : `/question/edit/${_id}`}
           >
             <Space>
-              {isStarState.current && <StarOutlined style={{ color: 'red' }} />}
+              {Boolean(isStarState.current) && <StarOutlined style={{ color: 'red' }} />}
               {title}
             </Space>
           </Link>

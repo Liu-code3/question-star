@@ -9,22 +9,24 @@ import { getQuestionListApi } from '@/api/question.ts'
 import { LIST_DEFAULT_PAGE_SIZE, LIST_SEARCH_PARAM_KEY } from '@/constant'
 import type { PropsType } from '@/components/QuestionCard'
 import QuestionCard from '@/components/QuestionCard'
+import { useLoadUserData } from '@/hooks/useLoadUserData.ts'
 
 const { Title } = Typography
 
 const List: FC = () => {
   useTitle('小星问卷 - 我的问卷')
 
+  useLoadUserData()
+
   const [page, setPage] = useState(1)
   const [list, setList] = useState([])
   const [total, setTotal] = useState(0)
   const started = useRef(false)
-
   const containerRef = useRef<HTMLDivElement>(null)
   const [searchParams] = useSearchParams() // url参数 虽然没有 page pageSize 但有keyword
   const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
 
-  const { run: load, loading } = useRequest(
+  const { run: load, loading, refresh } = useRequest(
     async () => {
       started.current = true // 请求开始 解决 暂无数据视图比loading先出现
       return await getQuestionListApi({
@@ -125,7 +127,7 @@ const List: FC = () => {
         {/* 问卷列表 */}
         {list.length > 0 && list.map((q: PropsType) => {
           const { _id } = q
-          return <QuestionCard key={_id} {...q} />
+          return <QuestionCard key={_id} {...q} onUpdateSuccess={refresh} />
         })}
         {loadingMoreContentEle}
       </div>

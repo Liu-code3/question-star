@@ -11,9 +11,12 @@ import { handlerError, reloadCodes, requestConfig, successCodes } from './config
 
 export function setupInterceptors(axiosInstance: AxiosInstance) {
   function reqResolve(config: InternalAxiosRequestConfig) {
-    const token = localCache.getCache(requestConfig.TOKEN_NAME)
-    if (token)
-      config.headers[requestConfig.TOKEN_NAME] = requestConfig.TOKEN_PREFIX + token
+    const isAuth = config.withCredentials ?? true
+    if (isAuth) {
+      const token = localCache.getCache(requestConfig.TOKEN_NAME)
+      if (token)
+        config.headers[requestConfig.TOKEN_NAME] = requestConfig.TOKEN_PREFIX + token
+    }
 
     if (!requestConfig.REQUEST_CACHE && config.method === 'get') {
       config.params = config.params || {}

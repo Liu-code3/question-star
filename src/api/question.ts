@@ -1,4 +1,4 @@
-import { requset } from '@/utils/http/index.js'
+import { request } from '@/utils/http/index.js'
 
 interface SearchType {
   keyword: string
@@ -9,21 +9,21 @@ interface SearchType {
 }
 
 function testApi() {
-  return requset.get('/test')
+  return request.get('/test')
 }
 
 /**
  * 创建问题
  */
 function createQuestionApi() {
-  return requset.post('/question')
+  return request.post('/question')
 }
 
 /**
  * 获取问题列表
  */
 function getQuestionListApi(options: Partial<SearchType>) {
-  return requset.get('/question', {
+  return request.get('/question', {
     params: options
   })
 }
@@ -32,21 +32,21 @@ function getQuestionListApi(options: Partial<SearchType>) {
  * 获取问题详情
  */
 function getQuestionItemApi(id: string) {
-  return requset.get(`/question/${id}`)
+  return request.get(`/question/${id}`)
 }
 /**
  * 更新问题
  */
 function updateQuestionItemApi<T>(id: string, options: { [key: string]: T }) {
-  return requset.patch(`/question/${id}`, { ...options })
+  return request.patch(`/question/${id}`, { ...options })
 }
 
 function duplicateQuestionApi(id: string) {
-  return requset.post(`/question/duplicate/${id}`)
+  return request.post(`/question/duplicate/${id}`)
 }
 
 function deleteQuestionByIdsApi(ids: string[]) {
-  return requset.delete(`/question`, { data: ids })
+  return request.delete(`/question`, { data: ids })
 }
 
 export {

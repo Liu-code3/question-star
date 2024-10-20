@@ -13,8 +13,6 @@ const UserInfo: FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // const { data } = useRequest(getUserInfoApi)
-  // const { username, nickname } = data?.data || {}
   const { nickname, username } = useGetUserInfo()
 
   function logout() {
