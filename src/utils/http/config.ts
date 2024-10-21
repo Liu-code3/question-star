@@ -1,5 +1,6 @@
 import type { AxiosError } from 'axios'
 import { message } from 'antd'
+import { localCache } from '@/utils/cache.ts'
 
 // 以下这些code需要重新登录
 const reloadCodes: number[] = [401, 1011007, 1011008]
@@ -39,6 +40,9 @@ const errorCodeMap: { [key: number]: string } = {
 function handlerError(error: AxiosError) {
   const status = error.response && error.response.status
   const description = status && errorCodeMap[status]
+  if (status === 401) {
+    localCache.removeCache(requestConfig.TOKEN_NAME)
+  }
   message.error(description)
 }
 
