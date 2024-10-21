@@ -2,7 +2,7 @@ import { request } from '@/utils/http/index.js'
 
 interface SearchType {
   keyword: string
-  isDeleted: boolean
+  isDelete: boolean
   isStar: boolean
   page: number
   pageSize: number

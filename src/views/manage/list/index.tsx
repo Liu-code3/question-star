@@ -26,7 +26,7 @@ const List: FC = () => {
   const [searchParams] = useSearchParams() // url参数 虽然没有 page pageSize 但有keyword
   const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
 
-  const { run: load, loading, refresh } = useRequest(
+  const { run: load, loading } = useRequest(
     async () => {
       started.current = true // 请求开始 解决 暂无数据视图比loading先出现
       return await getQuestionListApi({
@@ -108,7 +108,7 @@ const List: FC = () => {
 
     if (list.length >= total)
       return <Divider style={{ fontSize: '14px', color: '#999' }}>我也是有底线的...</Divider>
-  }, [loading, list.length, total])
+  }, [loading, list, total])
 
   return (
     <>
@@ -127,7 +127,7 @@ const List: FC = () => {
         {/* 问卷列表 */}
         {list.length > 0 && list.map((q: PropsType) => {
           const { _id } = q
-          return <QuestionCard key={_id} {...q} onUpdateSuccess={refresh} />
+          return <QuestionCard key={_id} {...q} onUpdateSuccess={load} />
         })}
         {loadingMoreContentEle}
       </div>

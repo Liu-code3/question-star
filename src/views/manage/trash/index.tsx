@@ -41,7 +41,7 @@ const tableColumns = [
 const Trash: FC = () => {
   useTitle('小星问卷 - 回收站')
 
-  const { data, loading, refresh } = useLoadQuestionListData({ isDeleted: true })
+  const { data, loading, refresh } = useLoadQuestionListData({ isDelete: true })
   const { list = [], total = 0 } = data?.data || {}
 
   // 记录选中的  id 列表
@@ -53,7 +53,7 @@ const Trash: FC = () => {
       // 遍历选中的问题ID，逐个恢复它们的状态
       for await (const id of selectedIds) {
         // 调用API恢复问题项的状态，将删除标记设为false
-        await updateQuestionItemApi(id, { isDeleted: false })
+        await updateQuestionItemApi(id, { isDelete: false })
       }
     },
     {
