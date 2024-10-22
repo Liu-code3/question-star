@@ -46,7 +46,7 @@ function duplicateQuestionApi(id: string) {
 }
 
 function deleteQuestionByIdsApi(ids: string[]) {
-  return request.delete(`/question`, { data: ids })
+  return request.delete(`/question`, { data: { ids } })
 }
 
 export {
