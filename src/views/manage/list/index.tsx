@@ -25,6 +25,7 @@ const List: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [searchParams] = useSearchParams() // url参数 虽然没有 page pageSize 但有keyword
   const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
+  const haveMoreData = total > list.length
 
   const { run: load, loading } = useRequest(
     async () => {
@@ -51,8 +52,9 @@ const List: FC = () => {
       const scrollH = containerRef.current?.scrollHeight || 0
       const viewH = containerRef.current?.offsetHeight || 0
       const scrollTop = containerRef.current?.scrollTop || 0
-      if ((scrollH - viewH - scrollTop <= 100)) {
-        if (page > 1 && (list.length >= total))
+
+      if ((scrollH - viewH - scrollTop) <= 100) {
+        if (haveMoreData)
           return
         setPage(page + 1)
         load()
@@ -79,12 +81,16 @@ const List: FC = () => {
   // 2.当页面滚动的时候,要尝试触发加载
   useEffect(() => {
     const el = containerRef.current
-    el && list.length <= total && el.addEventListener('scroll', tryLoadMore)
+    if (el && haveMoreData) {
+      el.addEventListener('scroll', tryLoadMore)
+    }
+
+    // el && list.length <= total && el.addEventListener('scroll', tryLoadMore)
 
     return () => {
       el && el.removeEventListener('scroll', tryLoadMore)
     }
-  }, [searchParams, list.length, total])
+  }, [haveMoreData, searchParams])
 
   const contentStyle: React.CSSProperties = {
     padding: 50,
@@ -103,12 +109,12 @@ const List: FC = () => {
       )
     }
 
-    if (list.length === 0)
+    if (total === 0)
       return <Empty description="暂无数据" />
 
-    if (list.length >= total)
+    if (!haveMoreData)
       return <Divider style={{ fontSize: '14px', color: '#999' }}>我也是有底线的...</Divider>
-  }, [loading, list, total])
+  }, [started.current, haveMoreData, loading, total])
 
   return (
     <>
@@ -127,7 +133,9 @@ const List: FC = () => {
         {/* 问卷列表 */}
         {list.length > 0 && list.map((q: PropsType) => {
           const { _id } = q
-          return <QuestionCard key={_id} {...q} onUpdateSuccess={load} />
+          return (
+            <QuestionCard key={_id} {...q} />
+          )
         })}
         {loadingMoreContentEle}
       </div>

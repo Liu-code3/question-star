@@ -15,6 +15,7 @@ const Star: FC = () => {
 
   const { data, loading, refresh } = useLoadQuestionListData({ isStar: true })
   const { list = [], total = 0 } = data?.data || {}
+
   return (
     <>
       <div className={styles.header}>

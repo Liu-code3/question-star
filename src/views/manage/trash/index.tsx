@@ -6,6 +6,7 @@ import styles from '@/views/manage/common.module.scss'
 import ListSearch from '@/components/ListSearch.tsx'
 import { useLoadQuestionListData } from '@/hooks/useLoadQuestionListData.ts'
 import { deleteQuestionByIdsApi, updateQuestionItemApi } from '@/api/question.ts'
+import { formatTime } from '@/utils/format.ts'
 
 const { Title } = Typography
 
@@ -18,7 +19,7 @@ const tableColumns = [
     title: '是否星标',
     dataIndex: 'isStar',
     render: (isStar: boolean) => {
-      return <Switch disabled={isStar} defaultChecked={isStar} />
+      return <Switch disabled defaultChecked={isStar} />
     }
   },
   {
@@ -43,6 +44,7 @@ const Trash: FC = () => {
 
   const { data, loading, refresh } = useLoadQuestionListData({ isDelete: true })
   const { list = [], total = 0 } = data?.data || {}
+  const dataSource = list.map((item: { [key: string]: any }) => ({ ...item, createdAt: formatTime(item.createdAt) }))
 
   // 记录选中的  id 列表
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -89,7 +91,7 @@ const Trash: FC = () => {
     <Table
       rowKey="_id"
       pagination={false}
-      dataSource={list}
+      dataSource={dataSource}
       columns={tableColumns}
       rowSelection={{
         type: 'checkbox',

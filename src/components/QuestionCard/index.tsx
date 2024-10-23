@@ -13,6 +13,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useRequest } from 'ahooks'
 import styles from './index.module.scss'
 import { duplicateQuestionApi, updateQuestionItemApi } from '@/api/question.ts'
+import { formatTime } from '@/utils/format.ts'
 
 const { confirm } = Modal
 export interface PropsType {
@@ -23,11 +24,10 @@ export interface PropsType {
   isPublished: boolean
   answerCount: number
   createdAt: string
-  onUpdateSuccess?: () => void
 }
 const QuestionCard: FC<PropsType> = (props) => {
   const navigate = useNavigate()
-  const { _id, title, createdAt, answerCount, isPublished, isStar, onUpdateSuccess } = props
+  const { _id, title, createdAt, answerCount, isPublished, isStar } = props
 
   /** 处理星标 */
   const isStarState = useRef(isStar)
@@ -36,10 +36,7 @@ const QuestionCard: FC<PropsType> = (props) => {
     isStarState.current = !isStarState.current
     return res
   }, {
-    manual: true,
-    onSuccess() {
-      onUpdateSuccess?.()
-    }
+    manual: true
   })
 
   /** 处理复制 */
@@ -56,7 +53,7 @@ const QuestionCard: FC<PropsType> = (props) => {
   /** 处理删除 */
   const isDeleteState = useRef(false)
   const { run: deleteQuestionItem, loading: deleteLoading } = useRequest(
-    async () => await updateQuestionItemApi(_id, { isDelete: !isDeleteState.current }),
+    async () => await updateQuestionItemApi<boolean>(_id, { isDelete: !isDeleteState.current }),
     {
       manual: true,
       onSuccess() {
@@ -107,7 +104,7 @@ const QuestionCard: FC<PropsType> = (props) => {
               答卷:
               { answerCount }
             </span>
-            <span>{ createdAt }</span>
+            <span>{ formatTime(createdAt) }</span>
           </Space>
         </div>
       </div>
