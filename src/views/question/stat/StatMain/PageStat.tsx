@@ -65,7 +65,7 @@ const PageStat: FC<IProps> = (props) => {
             setSelectedComponentType(type)
           }}
         >
-          <span className={`color-${fe_id === selectedComponentId ? '#1890ff' : 'inherit'}`}>
+          <span className={fe_id === selectedComponentId ? 'color-#4facfe' : ''}>
             { colTitle }
           </span>
         </div>

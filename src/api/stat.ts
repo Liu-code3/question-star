@@ -8,8 +8,8 @@ function getQuestionStatListApi(id: string, params: StatPageType) {
   return request.get(`/stat/${id}`, { params })
 }
 
-function getComponentStatApi (questionId: string, componentId: string) {
-  return request.get(`/stat/${questionId}/${componentId}`)
+function getComponentStatApi(questionId: string, componentFeId: string) {
+  return request.get(`/stat/${questionId}/${componentFeId}`)
 }
 
 export {
